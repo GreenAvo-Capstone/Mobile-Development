@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Green Avo</string>
+
+    <!-- ACTION BOTTOM BAR -->
+    <string name="title_home">Home</string>
+    <string name="title_camera">Camera</string>
+    <string name="title_profile">Profile</string>
+    <string name="gambar_alpukat">Gambar Alpukat</string>
+    <string name="jenis_alpukat">Jenis Alpukat</string>
+    <string name="resep_alpukat">Resep</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="rekomendasi">Temukan rekomendasi olahan alpukat</string>
+    <string name="email_format_alert">Invalid email format</string>
+    <string name="password_length_alert">Password must not be less than 8 characters</string>
+    <string name="invalid_email_format">Format email tidak valid</string>
+    <string name="length_of_password">Password tidak boleh kurang dari 8 karakter</string>
+</resources>

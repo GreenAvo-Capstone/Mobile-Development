@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:orientation="vertical"
+        android:padding="30dp">
+        <ImageView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:src="@drawable/ic_info_outline_24"
+            android:layout_gravity="center"/>
+        <TextView
+            android:id="@+id/tv_heading_konfirmasi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/baloo2_bold"
+            android:gravity="center"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="20dp"
+            android:text="Konfirmasi ?"
+            android:textSize="30sp" />
+        <TextView
+            android:id="@+id/tv_konfirmasi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/baloo2_medium"
+            android:gravity="center"
+            android:text="informasi?"
+            android:textSize="18sp" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_yes"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:background="@drawable/background_btn_yes"
+                android:fontFamily="@font/baloo2_semibold"
+                android:text="Ya"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:layout_marginEnd="25dp"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/btn_no"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_no"
+                android:layout_width="150dp"
+                android:layout_height="45dp"
+                android:background="@drawable/background_btn_no"
+                android:text="Tidak"
+                android:textAllCaps="false"
+                android:fontFamily="@font/baloo2_semibold"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/btn_yes"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

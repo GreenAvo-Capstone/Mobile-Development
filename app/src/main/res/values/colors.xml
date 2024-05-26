@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="bottom_nav_background_color">#F8F4FF</color>
+    <color name="bottom_nav_icon_color">#A8A2B9</color>
+    <color name="bottom_nav_icon_color_selected">#FFFFFF</color>
+    <color name="bottom_nav_text_color">#A8A2B9</color>
+    <color name="bottom_nav_text_color_selected">#86D846</color>
+
+    <color name="background_apk">#E4F1D9</color>
+
+    <color name="green">#86D846</color>
+    <color name="green2">#4ECB71</color>
+    <color name="green_old">#006E31</color>
+    <color name="save">#46D8D8</color>
+
+    <color name="low">#FF0000</color>
+    <color name="medium">#FFC700</color>
+    <color name="high">#006E31</color>
+</resources>

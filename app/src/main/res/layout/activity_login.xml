@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.login.LoginActivity">
+
+    <ImageView
+        android:id="@+id/wallpaper_login"
+        android:layout_width="wrap_content"
+        android:layout_height="250dp"
+        android:src="@drawable/wallpaper_login"
+        android:scaleType="fitXY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_header_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        android:textColor="@color/green_old"
+        android:textSize="32sp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/baloo2_bold"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/wallpaper_login"
+        app:layout_constraintStart_toStartOf="parent"/>
+    <TextView
+        android:id="@+id/tv_deskripsi_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Masukkan data terlebih dahulu"
+        android:fontFamily="@font/baloo2_medium"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_header_login"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:id="@+id/tv_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Email"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:fontFamily="@font/baloo2_semibold"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_deskripsi_login"/>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/et_email_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_email"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:startIconDrawable="@drawable/ic_email_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="18"
+            android:inputType="textEmailAddress"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:id="@+id/tv_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Password"
+        android:textSize="15sp"
+        android:fontFamily="@font/baloo2_semibold"
+        android:textColor="@color/black"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_email_layout"/>
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/et_password_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:endIconMode="password_toggle"
+        app:layout_constraintTop_toBottomOf="@+id/tv_password"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:startIconDrawable="@drawable/ic_password_24">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="18"
+            android:inputType="textPassword"
+            tools:ignore="SpeakableTextPresentCheck" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/background_login_register"
+        android:text="Login"
+        android:textColor="@color/white"
+        android:fontFamily="@font/baloo2_semibold"
+        android:textSize="18sp"
+        android:padding="12dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="50dp"
+        app:layout_constraintTop_toBottomOf="@id/et_password_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="14dp"
+        android:gravity="center"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintTop_toBottomOf="@id/btn_login">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jika tidak memiliki akun?"
+            android:textColor="@color/black"
+            android:fontFamily="@font/baloo2_medium"
+            android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/tv_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Register"
+            android:textSize="15sp"
+            android:fontFamily="@font/baloo2_semibold"
+            android:textColor="@color/green_old"
+            android:layout_marginStart="5dp"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

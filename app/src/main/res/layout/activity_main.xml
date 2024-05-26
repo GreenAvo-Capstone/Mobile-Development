@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.main.MainActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/title_home_green"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/baloo2_extrabold"
+            android:layout_marginStart="20dp"
+            android:text="GREEN"
+            android:textColor="@color/green_old"
+            android:textSize="25sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/title_home_avo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/baloo2_extrabold"
+            android:text="AVO"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <ImageView
+            android:id="@+id/iv_history"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:padding="3dp"
+            android:src="@drawable/ic_history_24"
+            android:layout_marginEnd="20dp"
+            android:layout_gravity="end"/>
+        <ImageView
+            android:id="@+id/iv_favorite"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:padding="3dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_bookmark_24"
+            android:layout_gravity="end"/>
+    </androidx.appcompat.widget.Toolbar>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="75dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/bottom_nav_background_color"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:itemIconTint="@color/bottom_navigation_icon_active"
+        app:itemTextColor="@color/bottom_navigation_text_active"
+        app:itemRippleColor="@color/green"
+        app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
+        app:labelVisibilityMode="selected"
+        app:menu="@menu/bottom_navigation_bar"/>
+
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
