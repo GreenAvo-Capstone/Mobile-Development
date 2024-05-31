@@ -1,11 +1,14 @@
 package com.capstone.greenavo.ui.register
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import com.capstone.greenavo.R
@@ -44,6 +47,47 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         setupAction()
+        playAnimation()
+    }
+
+    private fun playAnimation() {
+        val back = ObjectAnimator.ofFloat(binding.ivBack, View.ALPHA, 1f).setDuration(100)
+        val title = ObjectAnimator.ofFloat(binding.tvHeaderRegister, View.ALPHA, 1f).setDuration(100)
+        val deskripsiRegister =
+            ObjectAnimator.ofFloat(binding.tvDeskripsiRegister, View.ALPHA, 1f).setDuration(100)
+        val nameTextView =
+            ObjectAnimator.ofFloat(binding.tvNama, View.ALPHA, 1f).setDuration(100)
+        val namaEditTextLayout =
+            ObjectAnimator.ofFloat(binding.etNamaLayout, View.ALPHA, 1f).setDuration(100)
+        val emailTextView =
+            ObjectAnimator.ofFloat(binding.tvEmail, View.ALPHA, 1f).setDuration(100)
+        val emailEditTextLayout =
+            ObjectAnimator.ofFloat(binding.etEmailLayout, View.ALPHA, 1f).setDuration(100)
+        val passwordTextView =
+            ObjectAnimator.ofFloat(binding.tvPassword, View.ALPHA, 1f).setDuration(100)
+        val passwordEditTextLayout =
+            ObjectAnimator.ofFloat(binding.etPasswordLayout, View.ALPHA, 1f).setDuration(100)
+        val register = ObjectAnimator.ofFloat(binding.btnRegister, View.ALPHA, 1f).setDuration(100)
+        val deskripsiLogin = ObjectAnimator.ofFloat(binding.tvDeskripsiLogin, View.ALPHA, 1f).setDuration(100)
+        val login = ObjectAnimator.ofFloat(binding.tvLogin, View.ALPHA, 1F).setDuration(100)
+
+        AnimatorSet().apply {
+            playSequentially(
+                back,
+                title,
+                deskripsiRegister,
+                nameTextView,
+                namaEditTextLayout,
+                emailTextView,
+                emailEditTextLayout,
+                passwordTextView,
+                passwordEditTextLayout,
+                register,
+                deskripsiLogin,
+                login
+            )
+            startDelay = 100
+        }.start()
     }
 
     private fun buttonClicklable(isTrue : Boolean){

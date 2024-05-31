@@ -1,5 +1,7 @@
 package com.capstone.greenavo.ui.login
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Color
@@ -7,6 +9,7 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import com.capstone.greenavo.R
@@ -40,7 +43,40 @@ class LoginActivity : AppCompatActivity() {
         }
 
         setupAction()
+        playAnimation()
 
+    }
+
+    private fun playAnimation() {
+        val title = ObjectAnimator.ofFloat(binding.tvHeaderLogin, View.ALPHA, 1f).setDuration(100)
+        val deskripsiLogin =
+            ObjectAnimator.ofFloat(binding.tvDeskripsiLogin, View.ALPHA, 1f).setDuration(100)
+        val emailTextView =
+            ObjectAnimator.ofFloat(binding.tvEmail, View.ALPHA, 1f).setDuration(100)
+        val emailEditTextLayout =
+            ObjectAnimator.ofFloat(binding.etEmailLayout, View.ALPHA, 1f).setDuration(100)
+        val passwordTextView =
+            ObjectAnimator.ofFloat(binding.tvPassword, View.ALPHA, 1f).setDuration(100)
+        val passwordEditTextLayout =
+            ObjectAnimator.ofFloat(binding.etPasswordLayout, View.ALPHA, 1f).setDuration(100)
+        val login = ObjectAnimator.ofFloat(binding.btnLogin, View.ALPHA, 1f).setDuration(100)
+        val deskripsiRegister = ObjectAnimator.ofFloat(binding.tvDeskripsiRegister, View.ALPHA, 1f).setDuration(100)
+        val register = ObjectAnimator.ofFloat(binding.tvRegister, View.ALPHA, 1F).setDuration(100)
+
+        AnimatorSet().apply {
+            playSequentially(
+                title,
+                deskripsiLogin,
+                emailTextView,
+                emailEditTextLayout,
+                passwordTextView,
+                passwordEditTextLayout,
+                login,
+                deskripsiRegister,
+                register
+            )
+            startDelay = 100
+        }.start()
     }
 
     private fun buttonClicklable(isTrue: Boolean){

@@ -6,13 +6,11 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContentProviderCompat.requireContext
 import com.capstone.greenavo.R
 import com.capstone.greenavo.databinding.ActivityResultDetectionBinding
 import com.capstone.greenavo.databinding.LayoutSuccessBinding
-import com.capstone.greenavo.ui.resep.ResepAlpukatActivity
+import com.capstone.greenavo.ui.rekomendasi.RekomendasiActivity
 
 class ResultDetectionActivity : AppCompatActivity() {
     private var _binding: ActivityResultDetectionBinding? = null
@@ -33,7 +31,7 @@ class ResultDetectionActivity : AppCompatActivity() {
         }
 
         binding.rekomendasi.setOnClickListener {
-            val intent = Intent(this, ResepAlpukatActivity::class.java)
+            val intent = Intent(this, RekomendasiActivity::class.java)
             startActivity(intent)
         }
     }

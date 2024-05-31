@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.resep.ResepAlpukatActivity">
+    tools:context=".ui.rekomendasi.RekomendasiActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/action_bar"
@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Resep"
+            android:text="Rekomendasi"
             android:fontFamily="@font/baloo2_medium"
             android:textSize="20sp"
             android:layout_marginStart="30dp"

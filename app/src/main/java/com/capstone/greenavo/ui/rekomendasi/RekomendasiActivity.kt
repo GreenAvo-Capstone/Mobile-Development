@@ -1,17 +1,16 @@
-package com.capstone.greenavo.ui.resep
+package com.capstone.greenavo.ui.rekomendasi
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.capstone.greenavo.R
-import com.capstone.greenavo.databinding.ActivityResepAlpukatBinding
+import com.capstone.greenavo.databinding.ActivityRekomendasiBinding
 
-class ResepAlpukatActivity : AppCompatActivity() {
-    private var _binding: ActivityResepAlpukatBinding? = null
+class RekomendasiActivity : AppCompatActivity() {
+    private var _binding: ActivityRekomendasiBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityResepAlpukatBinding.inflate(layoutInflater)
+        _binding = ActivityRekomendasiBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.ivBack.setOnClickListener {

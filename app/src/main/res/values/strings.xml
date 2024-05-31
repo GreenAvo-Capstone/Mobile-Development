@@ -8,11 +8,78 @@
     <string name="gambar_alpukat">Gambar Alpukat</string>
     <string name="jenis_alpukat">Jenis Alpukat</string>
     <string name="resep_alpukat">Resep</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
     <string name="rekomendasi">Temukan rekomendasi olahan alpukat</string>
     <string name="email_format_alert">Invalid email format</string>
     <string name="password_length_alert">Password must not be less than 8 characters</string>
     <string name="invalid_email_format">Format email tidak valid</string>
     <string name="length_of_password">Password tidak boleh kurang dari 8 karakter</string>
+
+
+    <!-- Testing RECYCLER VIEW -->
+    <!-- Jenis Alpukat -->
+    <string-array name="gambar_alpukat">
+        <item>https://www.onlyfoods.net/wp-content/uploads/2019/12/Hass-Avocado.jpg</item>
+    </string-array>
+
+    <string-array name="nama_alpukat">
+        <item>Alpukat Hass</item>
+    </string-array>
+
+    <string-array name="deskripsi_satu">
+        <item>Alpukat Hass memiliki bentuk bulat hingga oval dengan kulit yang kasar dan berwarna hijau gelap hingga keunguan saat matang. Daging buahnya berwarna hijau kekuningan hingga kuning dan memiliki tekstur yang lembut.</item>
+    </string-array>
+
+    <string-array name="deskripsi_dua">
+        <item>Rasanya yang khas, agak krimi dan sedikit manis dengan sentuhan kacang. Karena teksturnya yang lembut, seringkali digunakan dalam pembuatan guacamole, salad, sandwich, atau sebagai tambahan dalam burger dan hidangan lainnya. Keunggulan Alpukat Hass juga terletak pada daya tahan yang lebih lama setelah matang, menjadikannya pilihan favorit di pasaran.</item>
+    </string-array>
+
+    <string-array name="sumber_lemak_sehat_serat">
+        <item>Alpukat Hass juga kaya akan lemak sehat, terutama lemak tak jenuh tunggal yang baik untuk kesehatan jantung. Selain itu, alpukat Hass juga mengandung serat yang membantu pencernaan dan menjaga kesehatan usus.</item>
+    </string-array>
+
+    <string-array name="kaya_akan_nutrisi">
+        <item>Seperti alpukat mentega, alpukat Hass juga mengandung berbagai nutrisi penting seperti vitamin K, vitamin E, vitamin C, dan vitamin B kompleks, serta mineral seperti kalium dan magnesium.</item>
+    </string-array>
+
+    <string-array name="tinggi_serat">
+        <item>Kandungan serat dalam alpukat Hass membantu menjaga kesehatan pencernaan, mengatur kadar gula darah, dan mengurangi risiko penyakit jantung.</item>
+    </string-array>
+
+    <string-array name="antioksidan">
+        <item>Alpukat Hass juga mengandung antioksidan seperti lutein dan zeaxanthin yang bermanfaat untuk menjaga kesehatan mata dan melindungi tubuh dari kerusakan sel yang disebabkan oleh radikal bebas.</item>
+    </string-array>
+
+    <string-array name="manfaat_kulit">
+        <item>Kandungan vitamin E dan lemak sehat dalam alpukat Hass juga baik untuk kesehatan kulit, membantu dalam regenerasi sel-sel kulit dan menjaga kelembapan serta elastisitas kulit.</item>
+    </string-array>
+
+
+    <!-- Resep Alpukat -->
+    <string-array name="gambar_resep">
+        <item>https://cdn1-production-images-kly.akamaized.net/SLFuiVal8gQNTEv-tEb_cCr0mTM=/0x209:2048x1363/1200x675/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/3111796/original/093223800_1587783815-shutterstock_576498463.jpg</item>
+    </string-array>
+
+    <string-array name="nama_resep">
+        <item>Alpukat Kocok</item>
+    </string-array>
+
+
+    <!-- History Hasil Deteksi -->
+    <string-array name="gambar_hasil_deteksi">
+        <item>https://www.onlyfoods.net/wp-content/uploads/2019/12/Hass-Avocado.jpg</item>
+    </string-array>
+
+    <string-array name="hasil_nama_alpukat">
+        <item>Alpukat Hass</item>
+    </string-array>
+
+    <string-array name="hasil_kematangan">
+        <item>Matang</item>
+    </string-array>
+
+    <string-array name="hasil_skor">
+        <item>95%</item>
+    </string-array>
+
 </resources>

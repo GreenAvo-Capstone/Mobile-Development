@@ -12,6 +12,7 @@ import com.capstone.greenavo.R
 import com.capstone.greenavo.databinding.ActivityMainBinding
 import com.capstone.greenavo.ui.ViewModelFactory
 import com.capstone.greenavo.ui.camera.CameraFragment
+import com.capstone.greenavo.ui.favorite.FavoriteActivity
 import com.capstone.greenavo.ui.history.HistoryActivity
 import com.capstone.greenavo.ui.home.HomeFragment
 import com.capstone.greenavo.ui.login.LoginActivity
@@ -52,7 +53,11 @@ class MainActivity : AppCompatActivity() {
 
         binding.ivHistory.setOnClickListener {
             val intent = Intent(this, HistoryActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startActivity(intent)
+        }
+
+        binding.ivFavorite.setOnClickListener {
+            val intent = Intent(this, FavoriteActivity::class.java)
             startActivity(intent)
         }
 
