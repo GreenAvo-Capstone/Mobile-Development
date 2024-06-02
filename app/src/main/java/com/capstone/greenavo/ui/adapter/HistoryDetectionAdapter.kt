@@ -2,6 +2,7 @@ package com.capstone.greenavo.ui.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.capstone.greenavo.data.ResultHistory
@@ -29,6 +30,9 @@ class HistoryDetectionAdapter (private val listHasilDeteksi: ArrayList<ResultHis
         Glide.with(holder.itemView.context)
             .load(hasilDeteksi.gambarHasil)
             .into(holder.binding.ivHasilGambarDeteksi)
+        holder.binding.btnDelete.setOnClickListener {
+            Toast.makeText(holder.itemView.context, "Telah menekan tombol hapus", Toast.LENGTH_SHORT).show()
+        }
     }
 
     override fun getItemCount(): Int = listHasilDeteksi.size

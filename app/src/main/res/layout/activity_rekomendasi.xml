@@ -30,4 +30,11 @@
             app:layout_constraintTop_toTopOf="parent"/>
     </androidx.appcompat.widget.Toolbar>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_rekomendasi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/action_bar"
+        tools:listitem="@layout/item_rekomendasi"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
