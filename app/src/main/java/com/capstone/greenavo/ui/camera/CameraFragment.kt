@@ -5,6 +5,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,13 +16,16 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import com.capstone.greenavo.R
 import com.capstone.greenavo.databinding.FragmentCameraBinding
+import com.capstone.greenavo.databinding.LayoutFailedBinding
 import com.capstone.greenavo.databinding.LayoutKonfirmasiBinding
 import com.capstone.greenavo.databinding.LayoutSuccessBinding
 import com.capstone.greenavo.ui.resultdetection.ResultDetectionActivity
 import com.capstone.greenavo.utils.getImageUri
 import com.yalantis.ucrop.UCrop
 import java.io.File
+import kotlin.random.Random
 
 class CameraFragment : Fragment() {
 
@@ -30,14 +35,9 @@ class CameraFragment : Fragment() {
     private var _binding: FragmentCameraBinding? = null
     private val binding get() = _binding!!
 
-    companion object {
-        const val TAG = "ImagePicker"
-        private const val REQUEST_RESULT = 1001
-    }
+    private var loadingDialog: AlertDialog? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentCameraBinding.inflate(inflater, container, false)
@@ -57,8 +57,13 @@ class CameraFragment : Fragment() {
         }
 
         binding.btnScan.setOnClickListener {
-            //Fungsi popup konfirmasi
-            showPopupKonfirmasi()
+            currentImageUri?.let {
+                //Fungsi popup konfirmasi
+                showPopupKonfirmasi()
+            } ?: run {
+                showToast(getString(R.string.image_classifier_failed))
+            }
+
         }
     }
 
@@ -151,8 +156,13 @@ class CameraFragment : Fragment() {
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
         dialogKonfirmasiBinding.btnYes.setOnClickListener {
-            showPopupBerhasil()
+            showLoading()
             dialog.dismiss()
+
+            Handler(Looper.getMainLooper()).postDelayed({
+                hideLoading()
+                showPopupBerhasil()
+            }, 2000)
         }
 
         dialogKonfirmasiBinding.btnNo.setOnClickListener {
@@ -160,6 +170,27 @@ class CameraFragment : Fragment() {
         }
 
         dialog.show()
+    }
+
+    //Loading
+    private fun showLoading() {
+        if (loadingDialog == null) {
+            val inflater = LayoutInflater.from(requireContext())
+            val loadingView = inflater.inflate(R.layout.layout_loading, null)
+
+            loadingDialog = AlertDialog.Builder(requireContext())
+                .setView(loadingView)
+                .setCancelable(false)
+                .create()
+
+            loadingDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+
+        loadingDialog?.show()
+    }
+
+    private fun hideLoading() {
+        loadingDialog?.dismiss()
     }
 
     //Popup berhasil
@@ -177,16 +208,28 @@ class CameraFragment : Fragment() {
 
         dialogSuccessBinding.btnOk.setOnClickListener {
             dialog.dismiss()
-            val intent = Intent(requireContext(), ResultDetectionActivity::class.java)
-            startActivity(intent)
+            analyzeImage()
         }
 
         dialog.show()
     }
 
+    //Analisis gambar pindah ke halaman Result
+    private fun analyzeImage() {
+        val intent = Intent(requireContext(), ResultDetectionActivity::class.java)
+        croppedImageUri?.let { uri ->
+            intent.putExtra(ResultDetectionActivity.EXTRA_IMAGE_URI, uri.toString())
+            startActivityForResult(intent, REQUEST_RESULT)
+        } ?: showToast(getString(R.string.image_classifier_failed))
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    companion object {
+        const val TAG = "ImagePicker"
+        private const val REQUEST_RESULT = 1001
     }
 }

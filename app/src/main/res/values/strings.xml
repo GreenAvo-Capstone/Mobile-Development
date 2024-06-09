@@ -15,6 +15,8 @@
     <string name="invalid_email_format">Format email tidak valid</string>
     <string name="length_of_password">Password tidak boleh kurang dari 8 karakter</string>
 
+    <string name="image_classifier_failed">Silahkan mengambil foto atau gambar terlebih dahulu</string>
+
 
     <!-- Testing RECYCLER VIEW -->
     <!-- Jenis Alpukat -->
