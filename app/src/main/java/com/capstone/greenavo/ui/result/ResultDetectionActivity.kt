@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.ImageDecoder
+import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Build
@@ -12,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.lifecycleScope
 import com.capstone.greenavo.R
@@ -19,11 +21,16 @@ import com.capstone.greenavo.databinding.ActivityResultDetectionBinding
 import com.capstone.greenavo.databinding.LayoutSuccessBinding
 import com.capstone.greenavo.ml.AvocadoClassification
 import com.capstone.greenavo.ui.rekomendasi.RekomendasiActivity
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.firestore
+import com.google.firebase.storage.storage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.tensorflow.lite.DataType
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer
+import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -45,10 +52,7 @@ class ResultDetectionActivity : AppCompatActivity() {
         }
 
         binding.btnSave.setOnClickListener {
-            showPopupSimpan()
-
-            //Fungsi Rekomendasi
-            displayRekomendasi()
+            saveDataDetection()
         }
 
         binding.rekomendasi.setOnClickListener {
@@ -57,6 +61,78 @@ class ResultDetectionActivity : AppCompatActivity() {
         }
 
         resultImage()
+    }
+    private fun saveDataDetection() {
+        // Get references to the ImageView and TextView elements
+        val imageView = binding.ivHasilDeteksi
+        val label = binding.hasilKematangan.text.toString()
+        val score = binding.hasilSkor.text.toString()
+
+        // Define Firebase Storage and Firestore references
+        val storage = Firebase.storage
+        val db = Firebase.firestore
+
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: "anonymous_user"
+
+        // Make the view visible and set the recommendation text based on the label
+        binding.rekomendasi.apply {
+            visibility = View.VISIBLE
+            text = if (label == "Belum Matang") "" else getString(R.string.rekomendasi)
+        }
+
+        // Convert ImageView to byte array
+        val bitmap = (imageView.drawable as BitmapDrawable).bitmap
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+
+        // Show a Toast message when the upload starts
+        Toast.makeText(this, "Uploading image...", Toast.LENGTH_SHORT).show()
+
+        // Create a unique filename for the image
+        val imageFileName = "images/${currentUserId}_${System.currentTimeMillis()}_hasilDeteksiImages.jpg"
+        val imageRef = storage.reference.child(imageFileName)
+
+        // Upload the image to Firebase Storage
+        val uploadTask = imageRef.putBytes(data)
+        uploadTask.addOnSuccessListener {
+            // Get the download URL of the uploaded image
+            imageRef.downloadUrl.addOnSuccessListener { uri ->
+                val imageUrl = uri.toString()
+
+                // Show a Toast message when the image upload is successful
+                Toast.makeText(this, "Image uploaded successfully!", Toast.LENGTH_SHORT).show()
+
+                // Create a new document in the Firestore collection "hasil_deteksi"
+                val detectionResult = hashMapOf(
+                    "image_url" to imageUrl,
+                    "label" to label,
+                    "score" to score
+                )
+
+                db.collection("users").document(currentUserId)
+                    .collection("hasil_deteksi")
+                    .add(detectionResult)
+                    .addOnSuccessListener { documentReference ->
+                        // Show a Toast message when the document is successfully added
+                        Toast.makeText(this, "Data saved successfully", Toast.LENGTH_SHORT).show()
+                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                    }
+                    .addOnFailureListener { e ->
+                        // Show a Toast message if adding the document fails
+                        Toast.makeText(this, "Error saving data: ${e.message}", Toast.LENGTH_SHORT).show()
+                        Log.w(TAG, "Error adding document", e)
+                    }
+            }.addOnFailureListener { exception ->
+                // Show a Toast message if getting the download URL fails
+                Toast.makeText(this, "Error getting download URL: ${exception.message}", Toast.LENGTH_SHORT).show()
+                Log.w(TAG, "Error getting download URL", exception)
+            }
+        }.addOnFailureListener { exception ->
+            // Show a Toast message if the image upload fails
+            Toast.makeText(this, "Error uploading image: ${exception.message}", Toast.LENGTH_SHORT).show()
+            Log.w(TAG, "Error uploading image", exception)
+        }
     }
 
     // Hasil gambar, kematangan, dan skor
@@ -157,7 +233,7 @@ class ResultDetectionActivity : AppCompatActivity() {
 
     private fun displayImage(uri: Uri) {
         Log.d(TAG, "Displaying image: $uri")
-        binding.hasilDeteksi.setImageURI(uri)
+        binding.ivHasilDeteksi.setImageURI(uri)
 
         try {
             val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -191,22 +267,6 @@ class ResultDetectionActivity : AppCompatActivity() {
         }
 
         dialog.show()
-    }
-
-    //Fungsi menampil textview Rekomendasi
-    private fun displayRekomendasi() {
-        val label = binding.hasilKematangan.text.toString()
-        val visibility = View.VISIBLE
-        val hidden = View.GONE
-        val text = getString(R.string.rekomendasi)
-        //Periksa label dan perbarui textview yang sesuai
-        if (label == "Belum Matang"){
-            binding.rekomendasi.visibility = visibility
-            binding.rekomendasi.text = ""
-        } else if (label == "Setengah Matang" || label == "Matang"){
-            binding.rekomendasi.visibility = visibility
-            binding.rekomendasi.text = text
-        }
     }
 
     override fun onDestroy() {

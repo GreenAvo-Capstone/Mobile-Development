@@ -1,14 +1,17 @@
 package com.capstone.greenavo.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.capstone.greenavo.data.ResultHistory
 import com.capstone.greenavo.databinding.ItemHistoryBinding
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.firestore
 
-class HistoryDetectionAdapter (private val listHasilDeteksi: ArrayList<ResultHistory>) : RecyclerView.Adapter<HistoryDetectionAdapter.ListViewHolder>() {
+class HistoryDetectionAdapter(private val listHasilDeteksi: MutableList<ResultHistory>) : RecyclerView.Adapter<HistoryDetectionAdapter.ListViewHolder>() {
     override fun onCreateViewHolder(
         viewGroup: ViewGroup,
         viewType: Int
@@ -19,21 +22,39 @@ class HistoryDetectionAdapter (private val listHasilDeteksi: ArrayList<ResultHis
 
     class ListViewHolder (val binding: ItemHistoryBinding): RecyclerView.ViewHolder(binding.root)
 
-    override fun onBindViewHolder(
-        holder: ListViewHolder,
-        position: Int
-    ) {
+    override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val hasilDeteksi = listHasilDeteksi[position]
-        holder.binding.tvNamaAlpukat.text = hasilDeteksi.namaAlpukat
+
         holder.binding.tvHasilKematangan.text = hasilDeteksi.kematangan
         holder.binding.tvSkor.text = hasilDeteksi.score
         Glide.with(holder.itemView.context)
-            .load(hasilDeteksi.gambarHasil)
+            .load(hasilDeteksi.image_url)
             .into(holder.binding.ivHasilGambarDeteksi)
+
+        //Hapus Data
         holder.binding.btnDelete.setOnClickListener {
-            Toast.makeText(holder.itemView.context, "Telah menekan tombol hapus", Toast.LENGTH_SHORT).show()
+            // Delete the document from Firestore using the document ID
+            deleteResult(holder.adapterPosition)
         }
     }
+    private fun deleteResult(position: Int) {
+        val result = listHasilDeteksi[position]
+        val db = Firebase.firestore
+        val userId = FirebaseAuth.getInstance().currentUser?.uid ?: "default_user_id" // Ganti dengan cara Anda mendapatkan ID pengguna
 
+        // Delete the document from Firestore using the document ID
+        db.collection("users").document(userId)
+            .collection("hasil_deteksi")
+            .document(result.id)
+            .delete()
+            .addOnSuccessListener {
+                listHasilDeteksi.removeAt(position) // Remove the item from the list
+                notifyItemRemoved(position) // Notify the adapter of item removal
+                Log.d("ResultDetectionAdapter", "DocumentSnapshot successfully deleted!")
+            }
+            .addOnFailureListener { e ->
+                Log.w("ResultDetectionAdapter", "Error deleting document", e)
+            }
+    }
     override fun getItemCount(): Int = listHasilDeteksi.size
 }

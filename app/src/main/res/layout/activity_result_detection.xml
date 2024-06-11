@@ -45,7 +45,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar">
             <ImageView
-                android:id="@+id/hasil_deteksi"
+                android:id="@+id/iv_hasil_deteksi"
                 android:layout_width="match_parent"
                 android:layout_height="360dp"
                 android:src="@drawable/pict_place"
@@ -65,7 +65,7 @@
                 android:text="Nama Alpukat"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/hasil_deteksi" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_hasil_deteksi" />
             <TextView
                 android:id="@+id/title_kematangan"
                 android:layout_width="wrap_content"
