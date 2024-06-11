@@ -28,24 +28,6 @@ class FavoriteActivity : AppCompatActivity() {
 
         binding.rvFavorite.setHasFixedSize(true)
         showRecyclerViewFavorite()
-
-        list.addAll(getListFavorite())
-    }
-
-    private fun getListFavorite(): ArrayList<RekomendasiAlpukat> {
-        val gambarRekomendasi = resources.getStringArray(R.array.gambar_rekomendasi)
-        val namaFavorite = resources.getStringArray(R.array.nama_rekomendasi)
-        val deskripsiFavorite = resources.getStringArray(R.array.deskripsi_rekomendasi)
-        val listFavorite = ArrayList<RekomendasiAlpukat>()
-        for (i in namaFavorite.indices){
-            val favorite = RekomendasiAlpukat(
-                gambarRekomendasi[i],
-                namaFavorite[i],
-                deskripsiFavorite[i]
-            )
-            listFavorite.add(favorite)
-        }
-        return listFavorite
     }
 
     private fun showRecyclerViewFavorite() {

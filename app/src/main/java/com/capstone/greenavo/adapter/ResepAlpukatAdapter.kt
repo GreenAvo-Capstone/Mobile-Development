@@ -13,15 +13,16 @@ class ResepAlpukatAdapter(private val resepList: List<ResepAlpukat>): RecyclerVi
         return ResepViewHolder(binding)
     }
 
-    class ResepViewHolder (val binding: ItemResepBinding): RecyclerView.ViewHolder(binding.root)
-
-    override fun getItemCount(): Int = resepList.size
+    inner class ResepViewHolder (val binding: ItemResepBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onBindViewHolder(holder: ResepViewHolder, position: Int) {
         val resepAlpukat = resepList[position]
+
         holder.binding.tvNamaResep.text = resepAlpukat.namaResep
         Glide.with(holder.itemView.context)
             .load(resepAlpukat.gambarAlpukat)
             .into(holder.binding.ivNamaResep)
     }
+
+    override fun getItemCount(): Int = resepList.size
 }

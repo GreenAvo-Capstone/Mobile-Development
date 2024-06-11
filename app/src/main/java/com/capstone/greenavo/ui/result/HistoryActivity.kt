@@ -27,26 +27,6 @@ class HistoryActivity : AppCompatActivity() {
 
         binding.rvHistory.setHasFixedSize(true)
         showRecyclerViewHistory()
-
-        list.addAll(getListHistoryDeteksi())
-    }
-
-    private fun getListHistoryDeteksi(): ArrayList<ResultHistory> {
-        val hasilGambar = resources.getStringArray(R.array.gambar_hasil_deteksi)
-        val hasilNamaAlpukat = resources.getStringArray(R.array.hasil_nama_alpukat)
-        val hasilKematangan= resources.getStringArray(R.array.hasil_kematangan)
-        val hasilSkor= resources.getStringArray(R.array.hasil_skor)
-        val listHistory = ArrayList<ResultHistory>()
-        for (i in hasilNamaAlpukat.indices){
-            val history = ResultHistory(
-                hasilGambar[i],
-                hasilNamaAlpukat[i],
-                hasilKematangan[i],
-                hasilSkor[i]
-            )
-            listHistory.add(history)
-        }
-        return listHistory
     }
 
     private fun showRecyclerViewHistory() {

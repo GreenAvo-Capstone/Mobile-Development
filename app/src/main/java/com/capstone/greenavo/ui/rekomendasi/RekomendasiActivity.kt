@@ -28,23 +28,6 @@ class RekomendasiActivity : AppCompatActivity() {
 
         binding.rvRekomendasi.setHasFixedSize(true)
         showRecyclerViewRekomendasi()
-
-        list.addAll(getListRekomendasi())
-    }
-    private fun getListRekomendasi(): ArrayList<RekomendasiAlpukat> {
-        val gambarRekomendasi = resources.getStringArray(R.array.gambar_rekomendasi)
-        val namaRekomendasi = resources.getStringArray(R.array.nama_rekomendasi)
-        val deskripsiRekomendasi = resources.getStringArray(R.array.deskripsi_rekomendasi)
-        val listRekomendasi = ArrayList<RekomendasiAlpukat>()
-        for (i in namaRekomendasi.indices){
-            val rekomendasi = RekomendasiAlpukat(
-                gambarRekomendasi[i],
-                namaRekomendasi[i],
-                deskripsiRekomendasi[i]
-            )
-            listRekomendasi.add(rekomendasi)
-        }
-        return listRekomendasi
     }
 
     private fun showRecyclerViewRekomendasi() {
