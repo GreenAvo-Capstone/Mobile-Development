@@ -1,14 +1,12 @@
 package com.capstone.greenavo.ui.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.capstone.greenavo.R
 import com.capstone.greenavo.data.JenisAlpukat
 import com.capstone.greenavo.data.ResepAlpukat
 import com.capstone.greenavo.databinding.FragmentHomeBinding
@@ -17,7 +15,6 @@ import com.capstone.greenavo.adapter.ResepAlpukatAdapter
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
-import com.google.firebase.firestore.toObject
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null

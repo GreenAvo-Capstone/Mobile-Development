@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.capstone.greenavo.R
 import com.capstone.greenavo.data.RekomendasiAlpukat
 import com.capstone.greenavo.databinding.ActivityFavoriteBinding
 import com.capstone.greenavo.adapter.RekomendasiAlpukatAdapter

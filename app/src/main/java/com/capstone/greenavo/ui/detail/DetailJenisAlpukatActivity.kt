@@ -1,10 +1,7 @@
 package com.capstone.greenavo.ui.detail
 
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.bumptech.glide.Glide
-import com.capstone.greenavo.data.JenisAlpukat
 import com.capstone.greenavo.databinding.ActivityDetailJenisAlpukatBinding
 
 class DetailJenisAlpukatActivity : AppCompatActivity() {
