@@ -12,7 +12,7 @@ import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import com.capstone.greenavo.R
 import com.capstone.greenavo.databinding.ActivitySplashScreenBinding
-import com.capstone.greenavo.ui.main.MainActivity
+import com.capstone.greenavo.ui.MainActivity
 
 class SplashScreenActivity : AppCompatActivity() {
     private var _binding: ActivitySplashScreenBinding? = null

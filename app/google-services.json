@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1087100029614",
+    "project_id": "greenavo-9fe35",
+    "storage_bucket": "greenavo-9fe35.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1087100029614:android:1d0e70b5b8df7d03d5fb3f",
+        "android_client_info": {
+          "package_name": "com.capstone.greenavo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCgik9vy366VYTn4vQvgLXlUpzWIw6_hbE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

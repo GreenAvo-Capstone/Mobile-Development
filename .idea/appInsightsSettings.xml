@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.capstone.greenavo" />
+                  <option name="mobileSdkAppId" value="1:1087100029614:android:1d0e70b5b8df7d03d5fb3f" />
+                  <option name="projectId" value="greenavo-9fe35" />
+                  <option name="projectNumber" value="1087100029614" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

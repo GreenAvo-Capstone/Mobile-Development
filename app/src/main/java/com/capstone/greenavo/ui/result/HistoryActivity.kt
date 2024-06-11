@@ -1,4 +1,4 @@
-package com.capstone.greenavo.ui.history
+package com.capstone.greenavo.ui.result
 
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstone.greenavo.R
 import com.capstone.greenavo.data.ResultHistory
 import com.capstone.greenavo.databinding.ActivityHistoryBinding
-import com.capstone.greenavo.ui.adapter.HistoryDetectionAdapter
+import com.capstone.greenavo.adapter.HistoryDetectionAdapter
 
 class HistoryActivity : AppCompatActivity() {
     private var _binding: ActivityHistoryBinding? = null

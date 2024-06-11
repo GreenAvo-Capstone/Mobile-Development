@@ -1,4 +1,4 @@
-package com.capstone.greenavo.ui.home
+package com.capstone.greenavo.ui.fragment
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,8 +10,8 @@ import com.capstone.greenavo.R
 import com.capstone.greenavo.data.JenisAlpukat
 import com.capstone.greenavo.data.ResepAlpukat
 import com.capstone.greenavo.databinding.FragmentHomeBinding
-import com.capstone.greenavo.ui.adapter.JenisAlpukatAdapter
-import com.capstone.greenavo.ui.adapter.ResepAlpukatAdapter
+import com.capstone.greenavo.adapter.JenisAlpukatAdapter
+import com.capstone.greenavo.adapter.ResepAlpukatAdapter
 
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null

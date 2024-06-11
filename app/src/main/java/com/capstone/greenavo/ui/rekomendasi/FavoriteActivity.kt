@@ -1,4 +1,4 @@
-package com.capstone.greenavo.ui.favorite
+package com.capstone.greenavo.ui.rekomendasi
 
 import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstone.greenavo.R
 import com.capstone.greenavo.data.RekomendasiAlpukat
 import com.capstone.greenavo.databinding.ActivityFavoriteBinding
-import com.capstone.greenavo.ui.adapter.RekomendasiAlpukatAdapter
+import com.capstone.greenavo.adapter.RekomendasiAlpukatAdapter
 
 class FavoriteActivity : AppCompatActivity() {
     private var _binding: ActivityFavoriteBinding? = null

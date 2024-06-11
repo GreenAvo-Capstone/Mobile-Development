@@ -1,4 +1,4 @@
-package com.capstone.greenavo.ui.resultdetection
+package com.capstone.greenavo.ui.result
 
 import android.content.Intent
 import android.graphics.Bitmap

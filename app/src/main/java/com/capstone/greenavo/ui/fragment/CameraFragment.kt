@@ -1,4 +1,4 @@
-package com.capstone.greenavo.ui.camera
+package com.capstone.greenavo.ui.fragment
 
 import android.content.Intent
 import android.graphics.Color
@@ -18,14 +18,12 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.capstone.greenavo.R
 import com.capstone.greenavo.databinding.FragmentCameraBinding
-import com.capstone.greenavo.databinding.LayoutFailedBinding
 import com.capstone.greenavo.databinding.LayoutKonfirmasiBinding
 import com.capstone.greenavo.databinding.LayoutSuccessBinding
-import com.capstone.greenavo.ui.resultdetection.ResultDetectionActivity
+import com.capstone.greenavo.ui.result.ResultDetectionActivity
 import com.capstone.greenavo.utils.getImageUri
 import com.yalantis.ucrop.UCrop
 import java.io.File
-import kotlin.random.Random
 
 class CameraFragment : Fragment() {
 

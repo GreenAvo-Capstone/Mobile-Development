@@ -2,9 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.result.HistoryActivity">
+    android:background="@color/black"
+    tools:context=".ui.profile.GambarActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/action_bar"
@@ -17,11 +19,12 @@
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_back_24"/>
+            android:src="@drawable/ic_back_white"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="History Detection"
+            android:text="Foto Profil"
+            android:textColor="@color/white"
             android:fontFamily="@font/baloo2_medium"
             android:textSize="20sp"
             android:layout_marginStart="30dp"
@@ -29,11 +32,24 @@
             app:layout_constraintTop_toTopOf="parent"/>
     </androidx.appcompat.widget.Toolbar>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_history"
+    <ImageView
+        android:id="@+id/iv_image_profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/action_bar"
-        tools:listitem="@layout/item_history"/>
+        android:layout_centerHorizontal="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/action_bar"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="14sp"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/action_bar"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

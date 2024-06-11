@@ -1,23 +1,23 @@
-package com.capstone.greenavo.ui.main
+package com.capstone.greenavo.ui
 
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import com.capstone.greenavo.R
 import com.capstone.greenavo.databinding.ActivityMainBinding
-import com.capstone.greenavo.ui.ViewModelFactory
-import com.capstone.greenavo.ui.camera.CameraFragment
-import com.capstone.greenavo.ui.favorite.FavoriteActivity
-import com.capstone.greenavo.ui.history.HistoryActivity
-import com.capstone.greenavo.ui.home.HomeFragment
-import com.capstone.greenavo.ui.login.LoginActivity
-import com.capstone.greenavo.ui.profile.ProfileFragment
-
+import com.capstone.greenavo.ui.authetication.LoginActivity
+import com.capstone.greenavo.ui.fragment.CameraFragment
+import com.capstone.greenavo.ui.fragment.HomeFragment
+import com.capstone.greenavo.ui.fragment.ProfileFragment
+import com.capstone.greenavo.ui.rekomendasi.FavoriteActivity
+import com.capstone.greenavo.ui.result.HistoryActivity
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 class MainActivity : AppCompatActivity() {
     private var _binding:ActivityMainBinding? = null
@@ -26,10 +26,8 @@ class MainActivity : AppCompatActivity() {
     //Select fragment Home
     private var selectedItemId: Int = R.id.home
 
-    //View Model
-    private val viewModel by viewModels<MainViewModel> {
-        ViewModelFactory.getInstance(this)
-    }
+    //Firebase
+    private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,11 +59,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        viewModel.getSession().observe(this) { user ->
-            if (user.token == "") {
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
-            }
+        auth = Firebase.auth
+        val firebasetUser = auth.currentUser
+        if (firebasetUser == null){
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
         }
     }
 

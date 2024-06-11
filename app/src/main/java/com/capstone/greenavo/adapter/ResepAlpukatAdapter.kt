@@ -1,4 +1,4 @@
-package com.capstone.greenavo.ui.adapter
+package com.capstone.greenavo.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

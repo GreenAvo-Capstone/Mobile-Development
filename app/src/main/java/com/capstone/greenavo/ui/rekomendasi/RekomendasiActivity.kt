@@ -7,10 +7,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstone.greenavo.R
 import com.capstone.greenavo.data.RekomendasiAlpukat
-import com.capstone.greenavo.data.ResultHistory
 import com.capstone.greenavo.databinding.ActivityRekomendasiBinding
-import com.capstone.greenavo.ui.adapter.HistoryDetectionAdapter
-import com.capstone.greenavo.ui.adapter.RekomendasiAlpukatAdapter
+import com.capstone.greenavo.adapter.RekomendasiAlpukatAdapter
 
 class RekomendasiActivity : AppCompatActivity() {
     private var _binding: ActivityRekomendasiBinding? = null
