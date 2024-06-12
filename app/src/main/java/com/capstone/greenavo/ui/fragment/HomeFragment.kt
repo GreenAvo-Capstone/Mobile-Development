@@ -60,9 +60,27 @@ class HomeFragment : Fragment() {
             .addOnSuccessListener { documents ->
                 jenisAlpukatList.clear()
                 for (document in documents) {
-                    val nama = document.getString("nama_alpukat") ?: ""
+                    val nama = document.getString("nama") ?: ""
                     val gambar = document.getString("gambar") ?: ""
-                    jenisAlpukatList.add(JenisAlpukat(nama, gambar))
+                    val deskripsi = document.getString("deskripsi") ?: ""
+                    val sumberLemak = document.getString("sumber_lemak") ?: ""
+                    val tinggiSerat = document.getString("tinggi_serat") ?: ""
+                    val kayaNutrisi = document.getString("kaya_nutrisi") ?: ""
+                    val antioksidan = document.getString("antioksidan") ?: ""
+                    val manfaatKulit = document.getString("manfaat_kulit") ?: ""
+                    val documentId = document.id  // Get the document ID
+
+                    jenisAlpukatList.add(JenisAlpukat(
+                        documentId,
+                        nama,
+                        gambar,
+                        deskripsi,
+                        sumberLemak,
+                        tinggiSerat,
+                        kayaNutrisi,
+                        antioksidan,
+                        manfaatKulit
+                    ))
                 }
                 jenisAlpukatAdapter = JenisAlpukatAdapter(jenisAlpukatList)
                 binding.rvJenisAlpukat.adapter = jenisAlpukatAdapter
@@ -83,12 +101,22 @@ class HomeFragment : Fragment() {
                 for (document in documents) {
                     val nama = document.getString("nama_resep") ?: ""
                     val gambar = document.getString("gambar") ?: ""
-                    resepAlpukatList.add(ResepAlpukat(nama, gambar))
+                    val deskripsi = document.getString("deskripsi") ?: ""
+                    val bahanArray = document.get("bahan") as? ArrayList<String> ?: arrayListOf()
+                    val membuatArray = document.get("cara_membuat") as? ArrayList<String> ?: arrayListOf()
+                    val documentId = document.id
+
+                    // Konversi array bahan menjadi string
+                    val bahan = bahanArray.joinToString("\n") { "• $it" }
+                    val membuat = membuatArray.joinToString("\n") { "$it" }
+
+                    resepAlpukatList.add(ResepAlpukat(documentId, nama, gambar, deskripsi, bahan, membuat))
                 }
                 resepAlpukatAdapter = ResepAlpukatAdapter(resepAlpukatList)
                 binding.rvResepAlpukat.adapter = resepAlpukatAdapter
                 binding.progressIndicatorResep.visibility = View.GONE
             }
+
             .addOnFailureListener { exception ->
                 Toast.makeText(requireContext(), exception.message, Toast.LENGTH_SHORT).show()
                 binding.progressIndicatorResep.visibility = View.GONE

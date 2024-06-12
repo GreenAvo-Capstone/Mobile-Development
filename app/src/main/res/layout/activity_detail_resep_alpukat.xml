@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.detail.DetailJenisAlpukatActivity">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <ImageView
+            android:id="@+id/iv_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_back_24"/>
+        <TextView
+            android:id="@+id/bar_jenis_alpukat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Detail Resep"
+            android:fontFamily="@font/baloo2_medium"
+            android:textSize="20sp"
+            android:layout_marginStart="30dp"
+            app:layout_constraintStart_toEndOf="@+id/iv_back"
+            app:layout_constraintTop_toTopOf="parent"/>
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/action_bar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="20dp">
+            <ImageView
+                android:id="@+id/iv_gambar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+            <TextView
+                android:id="@+id/tv_nama"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Resep"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:fontFamily="@font/baloo2_bold"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_gambar"/>
+            <com.codesgood.views.JustifiedTextView
+                android:id="@+id/tv_deskripsi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Deskripsi"
+                android:textSize="14sp"
+                android:fontFamily="@font/baloo2_medium"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_nama"/>
+
+            <TextView
+                android:id="@+id/tv_title_bahan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bahan:"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:fontFamily="@font/baloo2_bold"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_deskripsi"/>
+
+            <com.codesgood.views.JustifiedTextView
+                android:id="@+id/tv_bahan"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Line1 -\nLine2"
+                android:textSize="14sp"
+                android:fontFamily="@font/baloo2_medium"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_bahan"/>
+
+            <TextView
+                android:id="@+id/tv_title_membuat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cara Membuat:"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:fontFamily="@font/baloo2_bold"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="12dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_bahan"/>
+
+            <com.codesgood.views.JustifiedTextView
+                android:id="@+id/tv_membuat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cara membuat"
+                android:textSize="14sp"
+                android:fontFamily="@font/baloo2_medium"
+                android:layout_marginTop="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tv_title_membuat"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

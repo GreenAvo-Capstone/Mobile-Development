@@ -1,22 +1,20 @@
 package com.capstone.greenavo.ui.detail
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
-import com.capstone.greenavo.R
-import com.capstone.greenavo.data.JenisAlpukat
-import com.capstone.greenavo.databinding.ActivityDetailJenisAlpukatBinding
+import com.capstone.greenavo.databinding.ActivityDetailResepAlpukatBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
-class DetailJenisAlpukatActivity : AppCompatActivity() {
-    private var _binding: ActivityDetailJenisAlpukatBinding? = null
+class DetailResepAlpukatActivity : AppCompatActivity() {
+    private var _binding: ActivityDetailResepAlpukatBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var db: FirebaseFirestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityDetailJenisAlpukatBinding.inflate(layoutInflater)
+        _binding = ActivityDetailResepAlpukatBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // Setup toolbar
@@ -36,38 +34,35 @@ class DetailJenisAlpukatActivity : AppCompatActivity() {
     }
 
     private fun fetchDetails(documentId: String) {
-        db.collection("jenis_alpukat").document(documentId)
+        db.collection("resep_alpukat").document(documentId)
             .get()
             .addOnSuccessListener { document ->
                 if (document != null && document.exists()) {
                     // Retrieve the data from the document
-                    val nama = document.getString("nama") ?: ""
+                    val nama = document.getString("nama_resep") ?: ""
                     val gambar = document.getString("gambar") ?: ""
                     val deskripsi = document.getString("deskripsi") ?: ""
-                    val sumberLemak = document.getString("sumber_lemak") ?: ""
-                    val tinggiSerat = document.getString("tinggi_serat") ?: ""
-                    val kayaNutrisi = document.getString("kaya_nutrisi") ?: ""
-                    val antioksidan = document.getString("antioksidan") ?: ""
-                    val manfaatKulit = document.getString("manfaat_kulit") ?: ""
+
+                    // Retrieve the array field
+                    val bahanList = document.get("bahan") as? List<String> ?: arrayListOf()
+                    val membuatList = document.get("cara_membuat") as? ArrayList<String> ?: arrayListOf()
 
                     // Populate the views with the data
                     binding.tvNama.text = nama
                     Glide.with(this).load(gambar).into(binding.ivGambar)
                     binding.tvDeskripsi.text = deskripsi
-                    binding.tvSumberLemakSehatSerat.text = sumberLemak
-                    binding.tvTinggiSerat.text = tinggiSerat
-                    binding.tvKayaAkanNutrisi.text = kayaNutrisi
-                    binding.tvAntioksidan.text = antioksidan
-                    binding.tvManfaatKulit.text = manfaatKulit
+
+                    // Display the array data
+                    val membuat = membuatList.joinToString("\n") { "$it" }
+                    binding.tvMembuat.text = membuat
+
+                    // Display the array data
+                    val bahanText = bahanList.joinToString("\n") { "• $it" }
+                    binding.tvBahan.text = bahanText
                 }
             }
             .addOnFailureListener { exception ->
                 // Handle any errors here
             }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        _binding = null
     }
 }
