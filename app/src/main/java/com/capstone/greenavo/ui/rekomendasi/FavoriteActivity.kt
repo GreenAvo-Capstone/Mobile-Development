@@ -1,20 +1,31 @@
 package com.capstone.greenavo.ui.rekomendasi
 
-import android.content.res.Configuration
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.recyclerview.widget.GridLayoutManager
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.capstone.greenavo.data.RekomendasiAlpukat
-import com.capstone.greenavo.databinding.ActivityFavoriteBinding
+import com.capstone.greenavo.adapter.HistoryDetectionAdapter
 import com.capstone.greenavo.adapter.RekomendasiAlpukatAdapter
+import com.capstone.greenavo.data.RekomendasiAlpukat
+import com.capstone.greenavo.data.ResultHistory
+import com.capstone.greenavo.databinding.ActivityFavoriteBinding
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.firestore
 
 class FavoriteActivity : AppCompatActivity() {
     private var _binding: ActivityFavoriteBinding? = null
     private val binding get() = _binding!!
 
     //List
-    private val list = ArrayList<RekomendasiAlpukat>()
+    private val listFavorite: MutableList<RekomendasiAlpukat> = mutableListOf()
+
+    private lateinit var rekomendasiAlpukatAdapter: RekomendasiAlpukatAdapter
+
+    //Firebase
+    private lateinit var db: FirebaseFirestore
+    private lateinit var userId: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,20 +36,35 @@ class FavoriteActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        binding.rvFavorite.setHasFixedSize(true)
-        showRecyclerViewFavorite()
+        db = Firebase.firestore
+        // Mendapatkan ID pengguna saat ini (misalnya, dari Firebase Authentication)
+        userId = FirebaseAuth.getInstance().currentUser?.uid ?: "default_user_id"
+
+        // Initialize RecyclerView
+        binding.rvFavorite.layoutManager = LinearLayoutManager(this)
+        rekomendasiAlpukatAdapter = RekomendasiAlpukatAdapter(listFavorite)
+        binding.rvFavorite.adapter = rekomendasiAlpukatAdapter
+
+        reviewDataFavorite()
     }
 
-    private fun showRecyclerViewFavorite() {
-        binding.rvFavorite.layoutManager = LinearLayoutManager(this)
-        val listRekomendasiAlpukatAdapter = RekomendasiAlpukatAdapter(list)
-        binding.rvFavorite.adapter = listRekomendasiAlpukatAdapter
-
-        if (applicationContext.resources.configuration.orientation == Configuration.ORIENTATION_LANDSCAPE){
-            binding.rvFavorite.layoutManager = GridLayoutManager(this, 2)
-        } else {
-            binding.rvFavorite.layoutManager = LinearLayoutManager(this)
-        }
+    private fun reviewDataFavorite() {
+        db.collection("users")
+            .document(userId) // Menggunakan ID pengguna yang sesuai
+            .collection("favorite")
+            .get()
+            .addOnSuccessListener { result ->
+                listFavorite.clear()
+                for (document in result) {
+                    val favorite = document.toObject(RekomendasiAlpukat::class.java)
+                    favorite.id = document.id
+                    listFavorite.add(favorite)
+                }
+                rekomendasiAlpukatAdapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener { exception ->
+                Log.w("Favorite Acti", "Error getting documents.", exception)
+            }
     }
 
     override fun onDestroy() {
