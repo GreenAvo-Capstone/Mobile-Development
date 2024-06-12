@@ -54,37 +54,44 @@ class HomeFragment : Fragment() {
     }
 
     private fun showJenisAlpukat() {
+        binding.progressIndicatorAlpukat.visibility = View.VISIBLE
         db.collection("jenis_alpukat")
             .get()
-            .addOnSuccessListener { documentAlpukat ->
-                for (document in documentAlpukat) {
-                    val namaAlpukat = document.getString("nama_alpukat") ?:""
-                    val gambarAlpukat = document.getString("gambar")?:""
-                    jenisAlpukatList.add(JenisAlpukat(namaAlpukat, gambarAlpukat))
+            .addOnSuccessListener { documents ->
+                jenisAlpukatList.clear()
+                for (document in documents) {
+                    val nama = document.getString("nama_alpukat") ?: ""
+                    val gambar = document.getString("gambar") ?: ""
+                    jenisAlpukatList.add(JenisAlpukat(nama, gambar))
                 }
-
                 jenisAlpukatAdapter = JenisAlpukatAdapter(jenisAlpukatList)
                 binding.rvJenisAlpukat.adapter = jenisAlpukatAdapter
+                binding.progressIndicatorAlpukat.visibility = View.GONE
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(requireContext(), exception.message, Toast.LENGTH_SHORT).show()
+                binding.progressIndicatorAlpukat.visibility = View.GONE
             }
     }
 
     private fun showResepAlpukat() {
+        binding.progressIndicatorResep.visibility = View.VISIBLE
         db.collection("resep_alpukat")
             .get()
-            .addOnSuccessListener { documentResep ->
-                for (document in documentResep) {
-                    val namaResep = document.getString("nama_resep") ?: ""
-                    val gambarResep = document.getString("gambar") ?: ""
-                    resepAlpukatList.add(ResepAlpukat(namaResep, gambarResep))
+            .addOnSuccessListener { documents ->
+                resepAlpukatList.clear()
+                for (document in documents) {
+                    val nama = document.getString("nama_resep") ?: ""
+                    val gambar = document.getString("gambar") ?: ""
+                    resepAlpukatList.add(ResepAlpukat(nama, gambar))
                 }
                 resepAlpukatAdapter = ResepAlpukatAdapter(resepAlpukatList)
                 binding.rvResepAlpukat.adapter = resepAlpukatAdapter
+                binding.progressIndicatorResep.visibility = View.GONE
             }
             .addOnFailureListener { exception ->
                 Toast.makeText(requireContext(), exception.message, Toast.LENGTH_SHORT).show()
+                binding.progressIndicatorResep.visibility = View.GONE
             }
     }
 
