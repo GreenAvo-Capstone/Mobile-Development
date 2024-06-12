@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.capstone.greenavo.data.ResepAlpukat
 import com.capstone.greenavo.databinding.ItemResepBinding
-import com.capstone.greenavo.ui.detail.DetailJenisAlpukatActivity
 import com.capstone.greenavo.ui.detail.DetailResepAlpukatActivity
 
 class ResepAlpukatAdapter(private val resepList: List<ResepAlpukat>): RecyclerView.Adapter<ResepAlpukatAdapter.ResepViewHolder>() {

@@ -3,8 +3,6 @@ package com.capstone.greenavo.ui.detail
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.bumptech.glide.Glide
-import com.capstone.greenavo.R
-import com.capstone.greenavo.data.JenisAlpukat
 import com.capstone.greenavo.databinding.ActivityDetailJenisAlpukatBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
