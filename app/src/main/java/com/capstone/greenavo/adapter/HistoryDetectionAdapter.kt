@@ -20,12 +20,12 @@ class HistoryDetectionAdapter(private val listHasilDeteksi: MutableList<ResultHi
         return ListViewHolder(binding)
     }
 
-    class ListViewHolder (val binding: ItemHistoryBinding): RecyclerView.ViewHolder(binding.root)
+    inner class ListViewHolder (val binding: ItemHistoryBinding): RecyclerView.ViewHolder(binding.root)
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         val hasilDeteksi = listHasilDeteksi[position]
 
-        holder.binding.tvHasilKematangan.text = hasilDeteksi.kematangan
+        holder.binding.tvHasilKematangan.text = hasilDeteksi.label
         holder.binding.tvSkor.text = hasilDeteksi.score
         Glide.with(holder.itemView.context)
             .load(hasilDeteksi.image_url)

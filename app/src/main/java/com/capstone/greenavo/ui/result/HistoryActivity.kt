@@ -17,8 +17,6 @@ class HistoryActivity : AppCompatActivity() {
     private var _binding: ActivityHistoryBinding? = null
     private val binding get() = _binding!!
 
-    private val list = ArrayList<ResultHistory>()
-
     private lateinit var db: FirebaseFirestore
     private lateinit var userId: String
 
