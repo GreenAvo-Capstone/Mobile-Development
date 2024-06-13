@@ -16,9 +16,7 @@
 * intent Gallery -> Selecting a photo from the gallery
 * intent Camera -> Taking a photo Using the device Camera
 * Ucrop -> to provide image cropping or cropping functionality.
-* Retrofit -> get data From API and put & Post data to API
-* LiveData -> Access and update data in real time
-* Datastore -> Save user data when logging in
+* Firebase -> an application development platform that provides various services and tools to help developers build, improve, and manage applications.
 * TensorFlowLite -> Embedding/Deploying models using tensorFlowLite
   
 ## <H2> How To Run</H2>
