@@ -3,8 +3,10 @@ package com.capstone.greenavo.adapter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.capstone.greenavo.R
 import com.capstone.greenavo.data.ResultHistory
 import com.capstone.greenavo.databinding.ItemHistoryBinding
 import com.google.firebase.Firebase
@@ -26,6 +28,17 @@ class HistoryDetectionAdapter(private val listHasilDeteksi: MutableList<ResultHi
         val hasilDeteksi = listHasilDeteksi[position]
 
         holder.binding.tvHasilKematangan.text = hasilDeteksi.label
+        // Ubah warna teks berdasarkan label hasil
+        val textColor = when (hasilDeteksi.label) {
+            "Belum Matang" -> ContextCompat.getColor(holder.binding.root.context, R.color.low)
+            "Setengah Matang" -> ContextCompat.getColor(holder.binding.root.context, R.color.medium)
+            "Matang" -> ContextCompat.getColor(holder.binding.root.context, R.color.high)
+            else -> ContextCompat.getColor(holder.binding.root.context, android.R.color.black)
+        }
+
+        // Set warna teks ke TextView
+        holder.binding.tvHasilKematangan.setTextColor(textColor)
+
         holder.binding.tvSkor.text = hasilDeteksi.score
         Glide.with(holder.itemView.context)
             .load(hasilDeteksi.image_url)

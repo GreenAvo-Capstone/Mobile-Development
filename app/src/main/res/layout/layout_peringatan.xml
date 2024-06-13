@@ -1,48 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="30dp">
         <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:src="@drawable/ic_check_outline_24"
+            android:src="@drawable/ic_info_outline_24"
             android:layout_gravity="center"/>
         <TextView
-            android:id="@+id/tv_heading_success"
+            android:id="@+id/tv_heading_peringatan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/baloo2_bold"
             android:gravity="center"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="20dp"
-            android:text="Yeay berhasil !"
-            android:textColor="@color/green_old"
+            android:text="Peringatan!"
             android:textSize="26sp" />
         <TextView
-            android:id="@+id/tv_success"
+            android:id="@+id/tv_peringatan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/baloo2_medium"
             android:gravity="center"
-            android:text="informasi?"
-            android:textSize="16sp" />
+            android:text="peringatan"
+            android:textSize="16sp"/>
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_ok"
+            android:id="@+id/btn_yes"
             android:layout_width="match_parent"
             android:layout_height="45dp"
-            android:background="@drawable/background_btn_success"
-            android:text="OK"
+            android:background="@drawable/background_btn_yes"
             android:fontFamily="@font/baloo2_semibold"
-            android:textSize="18sp"
-            android:textAllCaps="false"
+            android:text="Ok"
             android:layout_marginTop="15dp"
-            android:textColor="@color/white" />
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp"/>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

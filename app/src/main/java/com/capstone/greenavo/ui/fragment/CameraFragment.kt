@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.capstone.greenavo.R
 import com.capstone.greenavo.databinding.FragmentCameraBinding
 import com.capstone.greenavo.databinding.LayoutKonfirmasiBinding
+import com.capstone.greenavo.databinding.LayoutPeringatanBinding
 import com.capstone.greenavo.databinding.LayoutSuccessBinding
 import com.capstone.greenavo.ui.result.ResultDetectionActivity
 import com.capstone.greenavo.utils.getImageUri
@@ -59,7 +60,7 @@ class CameraFragment : Fragment() {
                 //Fungsi popup konfirmasi
                 showPopupKonfirmasi()
             } ?: run {
-                showToast(getString(R.string.image_classifier_failed))
+                showPopupPeringatan()
             }
 
         }
@@ -212,13 +213,32 @@ class CameraFragment : Fragment() {
         dialog.show()
     }
 
+    //Popup peringatan
+    private fun showPopupPeringatan() {
+        val dialogPeringatanBinding = LayoutPeringatanBinding.inflate(layoutInflater)
+        dialogPeringatanBinding.tvPeringatan.text = "Silahkan mengambil foto atau gambar terlebih dahulu"
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogPeringatanBinding.root)
+            .setCancelable(false)
+            .create()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogPeringatanBinding.btnYes.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
     //Analisis gambar pindah ke halaman Result
     private fun analyzeImage() {
         val intent = Intent(requireContext(), ResultDetectionActivity::class.java)
         croppedImageUri?.let { uri ->
             intent.putExtra(ResultDetectionActivity.EXTRA_IMAGE_URI, uri.toString())
             startActivityForResult(intent, REQUEST_RESULT)
-        } ?: showToast(getString(R.string.image_classifier_failed))
+        }
     }
 
     override fun onDestroyView() {

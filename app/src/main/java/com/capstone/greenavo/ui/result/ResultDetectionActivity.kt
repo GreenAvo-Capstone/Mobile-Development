@@ -12,6 +12,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -41,6 +42,8 @@ class ResultDetectionActivity : AppCompatActivity() {
 
     val imageSize = 224
     private lateinit var resize: Bitmap
+
+    private var loadingDialog: AlertDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,8 +89,7 @@ class ResultDetectionActivity : AppCompatActivity() {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
 
-        // Show a Toast message when the upload starts
-        Toast.makeText(this, "Uploading image...", Toast.LENGTH_SHORT).show()
+        showLoading()
 
         // Create a unique filename for the image
         val imageFileName = "images/${currentUserId}_${System.currentTimeMillis()}_hasilDeteksiImages.jpg"
@@ -98,10 +100,10 @@ class ResultDetectionActivity : AppCompatActivity() {
         uploadTask.addOnSuccessListener {
             // Get the download URL of the uploaded image
             imageRef.downloadUrl.addOnSuccessListener { uri ->
-                val imageUrl = uri.toString()
 
-                // Show a Toast message when the image upload is successful
-                Toast.makeText(this, "Image uploaded successfully!", Toast.LENGTH_SHORT).show()
+                hideLoading()
+
+                val imageUrl = uri.toString()
 
                 // Create a new document in the Firestore collection "hasil_deteksi"
                 val detectionResult = hashMapOf(
@@ -115,12 +117,12 @@ class ResultDetectionActivity : AppCompatActivity() {
                     .add(detectionResult)
                     .addOnSuccessListener { documentReference ->
                         // Show a Toast message when the document is successfully added
-                        Toast.makeText(this, "Data saved successfully", Toast.LENGTH_SHORT).show()
+                        showPopupSimpan("Hasil Deteksi telah disimpan!")
                         Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
                     }
                     .addOnFailureListener { e ->
                         // Show a Toast message if adding the document fails
-                        Toast.makeText(this, "Error saving data: ${e.message}", Toast.LENGTH_SHORT).show()
+                        showPopupGagal("Gagal menyimpan hasil deteksi")
                         Log.w(TAG, "Error adding document", e)
                     }
             }.addOnFailureListener { exception ->
@@ -231,6 +233,27 @@ class ResultDetectionActivity : AppCompatActivity() {
         }
     }
 
+    //Loading
+    private fun showLoading() {
+        if (loadingDialog == null) {
+            val inflater = LayoutInflater.from(this@ResultDetectionActivity)
+            val loadingView = inflater.inflate(R.layout.layout_loading, null)
+
+            loadingDialog = AlertDialog.Builder(this@ResultDetectionActivity)
+                .setView(loadingView)
+                .setCancelable(false)
+                .create()
+
+            loadingDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+
+        loadingDialog?.show()
+    }
+
+    private fun hideLoading() {
+        loadingDialog?.dismiss()
+    }
+
     private fun displayImage(uri: Uri) {
         Log.d(TAG, "Displaying image: $uri")
         binding.ivHasilDeteksi.setImageURI(uri)
@@ -250,12 +273,15 @@ class ResultDetectionActivity : AppCompatActivity() {
         }
     }
 
-    private fun showPopupSimpan() {
+
+
+    //Popup berhasil
+    private fun showPopupSimpan(message: String) {
         val dialogSuccessBinding = LayoutSuccessBinding.inflate(layoutInflater)
 
-        dialogSuccessBinding.tvSuccess.text = "Menyimpan data berhasil!"
+        dialogSuccessBinding.tvSuccess.text = message
 
-        val dialog = AlertDialog.Builder(this)
+        val dialog = AlertDialog.Builder(this@ResultDetectionActivity)
             .setView(dialogSuccessBinding.root)
             .setCancelable(false)
             .create()
@@ -267,6 +293,24 @@ class ResultDetectionActivity : AppCompatActivity() {
         }
 
         dialog.show()
+    }
+
+    //Popup gagal
+    private fun showPopupGagal(message: String) {
+        val dialogFailedBinding = LayoutSuccessBinding.inflate(layoutInflater)
+
+        dialogFailedBinding.tvSuccess.text = message
+
+        val dialog = AlertDialog.Builder(this@ResultDetectionActivity)
+            .setView(dialogFailedBinding.root)
+            .setCancelable(false)
+            .create()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogFailedBinding.btnOk.setOnClickListener {
+            dialog.dismiss()
+        }
     }
 
     override fun onDestroy() {

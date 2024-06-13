@@ -4,12 +4,20 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.content.ContentValues
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import com.capstone.greenavo.R
 import com.capstone.greenavo.databinding.ActivityRegisterBinding
+import com.capstone.greenavo.databinding.LayoutFailedBinding
+import com.capstone.greenavo.databinding.LayoutPeringatanBinding
+import com.capstone.greenavo.databinding.LayoutSuccessBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -25,6 +33,8 @@ class RegisterActivity : AppCompatActivity() {
     //Firebase firestore
     private lateinit var db: FirebaseFirestore
 
+    private var loadingDialog: AlertDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityRegisterBinding.inflate(layoutInflater)
@@ -35,14 +45,17 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         binding.tvLogin.setOnClickListener {
-            startActivity(Intent(this, LoginActivity::class.java))
+            onBackPressedDispatcher.onBackPressed()
         }
 
         auth = Firebase.auth
         db = FirebaseFirestore.getInstance()
 
 
-        actionRegister()
+        binding.btnRegister.setOnClickListener{
+            actionRegister()
+        }
+
         //Animasi
         playAnimation()
     }
@@ -88,45 +101,109 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun actionRegister() {
-        binding.btnRegister.setOnClickListener {
-            val name = binding.etNama.text.toString()
-            val email = binding.etEmail.text.toString()
-            val password = binding.etPassword.text.toString()
-            if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
-                auth.createUserWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this) { task ->
-                        if (task.isSuccessful) {
-                            val user = auth.currentUser
-                            assert(user != null)
-                            val userId = user!!.uid
+        val name = binding.etNama.text.toString()
+        val email = binding.etEmail.text.toString()
+        val password = binding.etPassword.text.toString()
+        if (name.isNotEmpty() && email.isNotEmpty() && password.isNotEmpty()) {
 
-                            val userMap = hashMapOf(
-                                "name" to name,
-                                "email" to email,
-                                "password" to password
-                            )
+            showLoading()
 
-                            db.collection("users").document(userId).set(userMap)
-                                .addOnSuccessListener { documentReference ->
-                                    Log.d(ContentValues.TAG, "DocumentSnapshot added with ID: $userId")
-                                }
-                                .addOnFailureListener { e ->
-                                    Log.w(ContentValues.TAG, "Error adding document", e)
-                                }
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
 
-                            // Berhasil masuk, perbarui UI dengan informasi pengguna yang masuk
-                            Log.d(ContentValues.TAG, "createUserWithEmail:success")
-                            Toast.makeText(this, "Pendaftaran berhasil!", Toast.LENGTH_SHORT).show()
-                            updateUI(user)
-                        } else {
-                            Toast.makeText(this, "Pendaftaran gagal!", Toast.LENGTH_SHORT).show()
-                            updateUI(null)
-                        }
+                    hideLoading()
+
+                    if (task.isSuccessful) {
+                        val user = auth.currentUser
+                        assert(user != null)
+                        val userId = user!!.uid
+
+                        val userMap = hashMapOf(
+                            "name" to name,
+                            "email" to email,
+                            "password" to password
+                        )
+
+                        db.collection("users").document(userId).set(userMap)
+                            .addOnSuccessListener { documentReference ->
+                                Log.d(ContentValues.TAG, "DocumentSnapshot added with ID: $userId")
+                                Toast.makeText(this, "Pendaftaran berhasil!", Toast.LENGTH_SHORT).show()
+                            }
+                            .addOnFailureListener {
+                                showPopupGagal("Pendaftaran gagal!")
+                            }
+
+                        // Berhasil masuk, perbarui UI dengan informasi pengguna yang masuk
+                        Log.d(ContentValues.TAG, "createUserWithEmail:success")
+                        updateUI(user)
+                    } else {
+                        showPopupGagal("Pendaftaran gagal!")
                     }
-            } else {
-                Toast.makeText(this, "Lengkapi data!", Toast.LENGTH_SHORT).show()
-            }
+                }
+        } else {
+            showPopupPeringatan("Lengkapi Data Terlebih Dahulu")
         }
+    }
+
+    //Popup gagal
+    private fun showPopupGagal(message: String) {
+        val dialogSuccessBinding = LayoutFailedBinding.inflate(layoutInflater)
+
+        dialogSuccessBinding.tvFailed.text = message
+
+        val dialog = AlertDialog.Builder(this@RegisterActivity)
+            .setView(dialogSuccessBinding.root)
+            .setCancelable(false)
+            .create()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogSuccessBinding.btnOk.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    //Popup peringatan
+    private fun showPopupPeringatan(message: String) {
+        val dialogPeringatanBinding = LayoutPeringatanBinding.inflate(layoutInflater)
+        dialogPeringatanBinding.tvPeringatan.text = message
+
+        val dialog = AlertDialog.Builder(this@RegisterActivity)
+            .setView(dialogPeringatanBinding.root)
+            .setCancelable(false)
+            .create()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogPeringatanBinding.btnYes.setOnClickListener {
+            dialog.dismiss()
+            updateUI(null)
+        }
+
+        dialog.show()
+    }
+
+    //Loading
+    private fun showLoading() {
+        if (loadingDialog == null) {
+            val inflater = LayoutInflater.from(this@RegisterActivity)
+            val loadingView = inflater.inflate(R.layout.layout_loading, null)
+
+            loadingDialog = AlertDialog.Builder(this@RegisterActivity)
+                .setView(loadingView)
+                .setCancelable(false)
+                .create()
+
+            loadingDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+
+        loadingDialog?.show()
+    }
+
+    private fun hideLoading() {
+        loadingDialog?.dismiss()
     }
 
     private fun updateUI(user: FirebaseUser?) {

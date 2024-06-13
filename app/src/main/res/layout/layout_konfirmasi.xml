@@ -24,7 +24,7 @@
             android:layout_marginBottom="15dp"
             android:layout_marginTop="20dp"
             android:text="Konfirmasi ?"
-            android:textSize="30sp" />
+            android:textSize="26sp" />
         <TextView
             android:id="@+id/tv_konfirmasi"
             android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             android:fontFamily="@font/baloo2_medium"
             android:gravity="center"
             android:text="informasi?"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

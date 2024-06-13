@@ -2,12 +2,17 @@ package com.capstone.greenavo.ui.fragment
 
 import android.app.ActivityOptions
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat.startActivity
@@ -17,6 +22,7 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.capstone.greenavo.R
 import com.capstone.greenavo.databinding.FragmentProfileBinding
+import com.capstone.greenavo.databinding.LayoutKonfirmasiBinding
 import com.capstone.greenavo.ui.profile.EditProfileActivity
 import com.capstone.greenavo.ui.authetication.LoginActivity
 import com.capstone.greenavo.ui.profile.GambarActivity
@@ -33,6 +39,8 @@ class ProfileFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var db: FirebaseFirestore
 
+    private var loadingDialog: AlertDialog? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,7 +53,7 @@ class ProfileFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnLogout.setOnClickListener {
-            logout()
+            showPopupKonfirmasi()
         }
         binding.btnEditProfil.setOnClickListener {
             val intent = Intent(requireContext(), EditProfileActivity::class.java)
@@ -54,7 +62,6 @@ class ProfileFragment : Fragment() {
 
         auth = Firebase.auth
         db = FirebaseFirestore.getInstance()
-
 
         binding.ivImageProfile.setOnClickListener{
             val intent = Intent(requireContext(), GambarActivity::class.java)
@@ -111,13 +118,67 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    //Popup Informasi
+    private fun showPopupKonfirmasi() {
+        val dialogKonfirmasiBinding = LayoutKonfirmasiBinding.inflate(layoutInflater)
+        dialogKonfirmasiBinding.tvKonfirmasi.text = "Apakah ingin melakukan scan ?"
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogKonfirmasiBinding.root)
+            .setCancelable(false)
+            .create()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogKonfirmasiBinding.btnYes.setOnClickListener {
+            logout()
+            dialog.dismiss()
+        }
+
+        dialogKonfirmasiBinding.btnNo.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    //Loading
+    private fun showLoading() {
+        if (loadingDialog == null) {
+            val inflater = LayoutInflater.from(requireContext())
+            val loadingView = inflater.inflate(R.layout.layout_loading, null)
+
+            loadingDialog = AlertDialog.Builder(requireContext())
+                .setView(loadingView)
+                .setCancelable(false)
+                .create()
+
+            loadingDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+
+        loadingDialog?.show()
+    }
+    private fun hideLoading() {
+        loadingDialog?.dismiss()
+    }
+
+    //Logout
     private fun logout() {
+        showLoading()
         lifecycleScope.launch {
-            val credentialManager = CredentialManager.create(requireContext())
-            auth.signOut()
-            credentialManager.clearCredentialState(ClearCredentialStateRequest())
-            startActivity(Intent(requireContext(), LoginActivity::class.java))
-            requireActivity().finish()
+            try {
+                val credentialManager = CredentialManager.create(requireContext())
+                auth.signOut()
+                credentialManager.clearCredentialState(ClearCredentialStateRequest())
+
+                hideLoading()
+
+                startActivity(Intent(requireContext(), LoginActivity::class.java))
+                requireActivity().finish()
+            } catch (e: Exception){
+                Toast.makeText(requireContext(), e.message, Toast.LENGTH_SHORT).show()
+                hideLoading()
+            }
         }
     }
 

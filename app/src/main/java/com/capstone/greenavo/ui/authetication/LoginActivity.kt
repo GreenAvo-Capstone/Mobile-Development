@@ -4,11 +4,20 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContentProviderCompat.requireContext
+import com.capstone.greenavo.R
 import com.capstone.greenavo.databinding.ActivityLoginBinding
+import com.capstone.greenavo.databinding.LayoutFailedBinding
+import com.capstone.greenavo.databinding.LayoutPeringatanBinding
+import com.capstone.greenavo.databinding.LayoutSuccessBinding
 import com.capstone.greenavo.ui.MainActivity
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
@@ -22,6 +31,8 @@ class LoginActivity : AppCompatActivity() {
     //Firebase Auth
     private lateinit var auth: FirebaseAuth
 
+    private var loadingDialog: AlertDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityLoginBinding.inflate(layoutInflater)
@@ -29,7 +40,9 @@ class LoginActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        actionLogin()
+        binding.btnLogin.setOnClickListener{
+            actionLogin()
+        }
 
         //Animasi
         playAnimation()
@@ -73,27 +86,112 @@ class LoginActivity : AppCompatActivity() {
 
     //Fungsi menekan tombol login
     private fun actionLogin() {
-        binding.btnLogin.setOnClickListener {
-            val email = binding.etEmail.text.toString()
-            val password = binding.etPassword.text.toString()
+        val email = binding.etEmail.text.toString()
+        val password = binding.etPassword.text.toString()
 
-            if (email.isNotEmpty() && password.isNotEmpty() ) {
-                auth.signInWithEmailAndPassword(email, password)
-                    .addOnCompleteListener(this) { task ->
-                        if (task.isSuccessful) {
-                            val user = auth.currentUser
-                            Toast.makeText(this, "Login berhasil", Toast.LENGTH_SHORT).show()
-                            updateUi(user)
-                        } else {
-                            Toast.makeText(this, "Login gagal", Toast.LENGTH_SHORT).show()
-                            updateUi(null)
-                        }
+        if (email.isNotEmpty() && password.isNotEmpty() ) {
+
+            showLoading()
+
+            auth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this) { task ->
+
+                    hideLoading()
+
+                    if (task.isSuccessful) {
+                        showPopupBerhasil()
+                    } else {
+                        showPopupGagal()
                     }
-            } else {
-                Toast.makeText(this, "Harap isi semua field", Toast.LENGTH_SHORT).show()
-            }
+                }
+        } else {
+            showPopupPeringatan()
         }
     }
+
+    //Popup berhasil
+    private fun showPopupBerhasil() {
+        val dialogSuccessBinding = LayoutSuccessBinding.inflate(layoutInflater)
+
+        dialogSuccessBinding.tvSuccess.text = "Berhasil login!!"
+
+        val dialog = AlertDialog.Builder(this@LoginActivity)
+            .setView(dialogSuccessBinding.root)
+            .setCancelable(false)
+            .create()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogSuccessBinding.btnOk.setOnClickListener {
+            dialog.dismiss()
+            val user = auth.currentUser
+            updateUi(user)
+        }
+
+        dialog.show()
+    }
+
+    //Popup gagal
+    private fun showPopupGagal() {
+        val dialogSuccessBinding = LayoutFailedBinding.inflate(layoutInflater)
+
+        dialogSuccessBinding.tvFailed.text = "Gagal login!!"
+
+        val dialog = AlertDialog.Builder(this@LoginActivity)
+            .setView(dialogSuccessBinding.root)
+            .setCancelable(false)
+            .create()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogSuccessBinding.btnOk.setOnClickListener {
+            dialog.dismiss()
+            updateUi(null)
+        }
+
+        dialog.show()
+    }
+
+    //Popup peringatan
+    private fun showPopupPeringatan() {
+        val dialogPeringatanBinding = LayoutPeringatanBinding.inflate(layoutInflater)
+        dialogPeringatanBinding.tvPeringatan.text = "Harap isi semua field"
+
+        val dialog = AlertDialog.Builder(this@LoginActivity)
+            .setView(dialogPeringatanBinding.root)
+            .setCancelable(false)
+            .create()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogPeringatanBinding.btnYes.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    //Loading
+    private fun showLoading() {
+        if (loadingDialog == null) {
+            val inflater = LayoutInflater.from(this@LoginActivity)
+            val loadingView = inflater.inflate(R.layout.layout_loading, null)
+
+            loadingDialog = AlertDialog.Builder(this@LoginActivity)
+                .setView(loadingView)
+                .setCancelable(false)
+                .create()
+
+            loadingDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+
+        loadingDialog?.show()
+    }
+
+    private fun hideLoading() {
+        loadingDialog?.dismiss()
+    }
+
 
     private fun updateUi(user: FirebaseUser?) {
         if (user != null) {
