@@ -50,7 +50,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         binding.btnKonfirmasi.setOnClickListener {
-            actionSaveData(auth.currentUser?.uid.toString())
+            actionSaveData(auth.currentUser?.uid.toString(), croppedImageUri.toString())
         }
 
         binding.ivBack.setOnClickListener {
@@ -205,30 +205,27 @@ class EditProfileActivity : AppCompatActivity() {
                 // Get the URL of the uploaded cropped image
                 storageRef.downloadUrl.addOnSuccessListener { imageUrl ->
                     // Update Firestore document with the new image URL
-                    actionSaveData(auth.currentUser?.uid.toString(), imageUrl.toString())
+                    Log.e(TAG, "Image URL: $imageUrl")
                 }
             }
             .addOnFailureListener { e ->
                 // Failed to upload the cropped image
-                Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "Error uploading cropped image: ${e.message}")
             }
     }
 
     //Simpan data
-    private fun actionSaveData(userId: String, imageUrl: String? = null) {
-        val updatedData = hashMapOf<String, Any>(
+    private fun actionSaveData(userId: String, imageUrl: String) {
+        val user = hashMapOf<String, Any>(
             "name" to binding.etNama.text.toString(),
+            "foto_profil" to imageUrl,  // Simpan URL gambar di sini
             "alamat" to binding.etAlamat.text.toString(),
             "no_tlp" to binding.etNomorTelepon.text.toString()
         )
 
-        // If a new image URL is provided, include it in the updated data
-        if (imageUrl != null) {
-            updatedData["foto_profil"] = imageUrl
-        }
-
-        db.collection("users").document(userId)
-            .update(updatedData)
+        db.collection("users")
+            .document(userId)
+            .update(user)
             .addOnSuccessListener {
                 Toast.makeText(this, "Data profil berhasil diupdate!", Toast.LENGTH_SHORT).show()
                 finish()

@@ -47,9 +47,19 @@ class HomeFragment : Fragment() {
         binding.rvJenisAlpukat.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
         binding.rvResepAlpukat.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
 
+        refresh()
+
         // Call functions to show data
         showJenisAlpukat()
         showResepAlpukat()
+    }
+
+    private fun refresh() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.isRefreshing = false
+            showJenisAlpukat()
+            showResepAlpukat()
+        }
     }
 
     private fun showJenisAlpukat() {

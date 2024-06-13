@@ -62,8 +62,17 @@ class ProfileFragment : Fragment() {
             startActivity(intent)
         }
 
+        refresh()
+
         //Menampilkan semua data profil
         viewData()
+    }
+
+    private fun refresh() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.isRefreshing = false
+            viewData()
+        }
     }
 
     private fun viewData() {
