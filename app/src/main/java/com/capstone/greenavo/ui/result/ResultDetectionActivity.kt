@@ -22,10 +22,9 @@ import com.capstone.greenavo.databinding.ActivityResultDetectionBinding
 import com.capstone.greenavo.databinding.LayoutSuccessBinding
 import com.capstone.greenavo.ml.AvocadoClassification
 import com.capstone.greenavo.ui.rekomendasi.RekomendasiActivity
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.firestore
-import com.google.firebase.storage.storage
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,10 +39,10 @@ class ResultDetectionActivity : AppCompatActivity() {
     private var _binding: ActivityResultDetectionBinding? = null
     private val binding get() = _binding!!
 
-    val imageSize = 224
     private lateinit var resize: Bitmap
-
     private var loadingDialog: AlertDialog? = null
+
+    private val imageSize = 224 // Size of the image expected by your model
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +50,7 @@ class ResultDetectionActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.ivBack.setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+            onBackPressed()
         }
 
         binding.btnSave.setOnClickListener {
@@ -65,98 +64,44 @@ class ResultDetectionActivity : AppCompatActivity() {
 
         resultImage()
     }
-    private fun saveDataDetection() {
-        // Get references to the ImageView and TextView elements
-        val imageView = binding.ivHasilDeteksi
-        val label = binding.hasilKematangan.text.toString()
-        val score = binding.hasilSkor.text.toString()
 
-        // Define Firebase Storage and Firestore references
-        val storage = Firebase.storage
-        val db = Firebase.firestore
-
-        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: "anonymous_user"
-
-        // Make the view visible and set the recommendation text based on the label
-        binding.rekomendasi.apply {
-            visibility = View.VISIBLE
-            text = if (label == "Belum Matang") "" else getString(R.string.rekomendasi)
-        }
-
-        // Convert ImageView to byte array
-        val bitmap = (imageView.drawable as BitmapDrawable).bitmap
-        val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val data = baos.toByteArray()
-
-        showLoading()
-
-        // Create a unique filename for the image
-        val imageFileName = "images/${currentUserId}_${System.currentTimeMillis()}_hasilDeteksiImages.jpg"
-        val imageRef = storage.reference.child(imageFileName)
-
-        // Upload the image to Firebase Storage
-        val uploadTask = imageRef.putBytes(data)
-        uploadTask.addOnSuccessListener {
-            // Get the download URL of the uploaded image
-            imageRef.downloadUrl.addOnSuccessListener { uri ->
-
-                hideLoading()
-
-                val imageUrl = uri.toString()
-
-                // Create a new document in the Firestore collection "hasil_deteksi"
-                val detectionResult = hashMapOf(
-                    "image_url" to imageUrl,
-                    "label" to label,
-                    "score" to score
-                )
-
-                db.collection("users").document(currentUserId)
-                    .collection("hasil_deteksi")
-                    .add(detectionResult)
-                    .addOnSuccessListener { documentReference ->
-                        // Show a Toast message when the document is successfully added
-                        showPopupSimpan("Hasil Deteksi telah disimpan!")
-                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                    }
-                    .addOnFailureListener { e ->
-                        // Show a Toast message if adding the document fails
-                        showPopupGagal("Gagal menyimpan hasil deteksi")
-                        Log.w(TAG, "Error adding document", e)
-                    }
-            }.addOnFailureListener { exception ->
-                // Show a Toast message if getting the download URL fails
-                Toast.makeText(this, "Error getting download URL: ${exception.message}", Toast.LENGTH_SHORT).show()
-                Log.w(TAG, "Error getting download URL", exception)
-            }
-        }.addOnFailureListener { exception ->
-            // Show a Toast message if the image upload fails
-            Toast.makeText(this, "Error uploading image: ${exception.message}", Toast.LENGTH_SHORT).show()
-            Log.w(TAG, "Error uploading image", exception)
-        }
-    }
-
-    // Hasil gambar, kematangan, dan skor
     private fun resultImage() {
         val imageUriString = intent.getStringExtra(EXTRA_IMAGE_URI)
         if (imageUriString != null) {
             val imageUri = Uri.parse(imageUriString)
             displayImage(imageUri)
-            classifications()
+            classifyImage()
         } else {
             Log.e(TAG, "No image URI provided")
             finish()
         }
     }
 
-    private fun classifications() {
+    private fun displayImage(uri: Uri) {
+        Log.d(TAG, "Displaying image: $uri")
+        binding.ivHasilDeteksi.setImageURI(uri)
+
+        try {
+            val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                val source = ImageDecoder.createSource(contentResolver, uri)
+                ImageDecoder.decodeBitmap(source) { decoder, _, _ ->
+                    decoder.setAllocator(ImageDecoder.ALLOCATOR_SOFTWARE)
+                }
+            } else {
+                val inputStream: InputStream? = contentResolver.openInputStream(uri)
+                BitmapFactory.decodeStream(inputStream)
+            }
+            resize = Bitmap.createScaledBitmap(bitmap, imageSize, imageSize, true)
+        } catch (e: Exception) {
+            Log.e(TAG, "Error decoding image", e)
+            finish()
+        }
+    }
+
+    private fun classifyImage() {
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                // Model
                 val model = AvocadoClassification.newInstance(this@ResultDetectionActivity)
-
-                // Creates inputs for reference.
                 val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, imageSize, imageSize, 3), DataType.FLOAT32)
 
                 val intValues = IntArray(resize.width * resize.height)
@@ -169,7 +114,7 @@ class ResultDetectionActivity : AppCompatActivity() {
 
                 for (i in 0 until imageSize) {
                     for (j in 0 until imageSize) {
-                        val `val` = intValues[pixel++] // RGB
+                        val `val` = intValues[pixel++]
                         byteBuffer.putFloat(((`val` shr 16) and 0xFF).toFloat() * (1f / 255f))
                         byteBuffer.putFloat(((`val` shr 8) and 0xFF).toFloat() * (1f / 255f))
                         byteBuffer.putFloat((`val` and 0xFF).toFloat() * (1f / 255f))
@@ -177,12 +122,9 @@ class ResultDetectionActivity : AppCompatActivity() {
                 }
 
                 inputFeature0.loadBuffer(byteBuffer)
-
-                // Runs model inference and gets result.
                 val outputs = model.process(inputFeature0)
                 val outputFeature0 = outputs.outputFeature0AsTensorBuffer
 
-                // Get labels and scores
                 val confidences = outputFeature0.floatArray
 
                 val labelMap = mapOf(
@@ -191,9 +133,9 @@ class ResultDetectionActivity : AppCompatActivity() {
                     2 to "Matang"
                 )
 
-                // Find the top prediction
                 var maxPos = 0
                 var maxConfidence = 0f
+
                 for (i in confidences.indices) {
                     if (confidences[i] > maxConfidence) {
                         maxConfidence = confidences[i]
@@ -201,39 +143,92 @@ class ResultDetectionActivity : AppCompatActivity() {
                     }
                 }
 
-                // Get the label using the map
                 val label = labelMap[maxPos] ?: "Unknown"
 
                 fun Float.formatToString(): String {
                     return String.format("%.0f%%", this * 100)
                 }
 
-                // Determine the color based on the label
                 val color = when (label) {
                     "Belum Matang" -> R.color.low
                     "Setengah Matang" -> R.color.medium
                     "Matang" -> R.color.high
-                    else -> android.R.color.black // default color
+                    else -> android.R.color.black
                 }
 
-                // Display the results (e.g., in a TextView)
                 withContext(Dispatchers.Main) {
-                    binding.hasilKematangan.text = "$label"
+                    binding.hasilKematangan.text = label
                     binding.hasilKematangan.setTextColor(resources.getColor(color, null))
-                    binding.hasilSkor.text = "${maxConfidence.formatToString()}"
-                    binding.isiDeskripisi.text = "Hasil tingkat kematangan adalah ${label} dengan skor ${maxConfidence.formatToString()}"
+                    binding.hasilSkor.text = maxConfidence.formatToString()
+                    binding.isiDeskripisi.text = "Hasil tingkat kematangan adalah $label dengan skor ${maxConfidence.formatToString()}"
                 }
 
-                // Releases model resources if no longer used.
                 model.close()
 
             } catch (e: Exception) {
-                Log.e("Error", "Error during image processing", e)
+                Log.e(TAG, "Error during image processing", e)
             }
         }
     }
 
-    //Loading
+    private fun saveDataDetection() {
+        val imageView = binding.ivHasilDeteksi
+        val label = binding.hasilKematangan.text.toString()
+        val score = binding.hasilSkor.text.toString()
+
+        val storage = FirebaseStorage.getInstance()
+        val db = FirebaseFirestore.getInstance()
+        val currentUserId = FirebaseAuth.getInstance().currentUser?.uid ?: "anonymous_user"
+
+        binding.rekomendasi.apply {
+            visibility = View.VISIBLE
+            text = if (label == "Belum Matang") "" else getString(R.string.rekomendasi)
+        }
+
+        val bitmap = (imageView.drawable as BitmapDrawable).bitmap
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+
+        showLoading()
+
+        val imageFileName = "images/${currentUserId}_${System.currentTimeMillis()}_hasilDeteksiImages.jpg"
+        val imageRef = storage.reference.child(imageFileName)
+
+        val uploadTask = imageRef.putBytes(data)
+        uploadTask.addOnSuccessListener {
+            imageRef.downloadUrl.addOnSuccessListener { uri ->
+                hideLoading()
+
+                val imageUrl = uri.toString()
+
+                val detectionResult = hashMapOf(
+                    "image_url" to imageUrl,
+                    "label" to label,
+                    "score" to score
+                )
+
+                db.collection("users").document(currentUserId)
+                    .collection("hasil_deteksi")
+                    .add(detectionResult)
+                    .addOnSuccessListener { documentReference ->
+                        showPopupSimpan("Hasil Deteksi telah disimpan!")
+                        Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                    }
+                    .addOnFailureListener { e ->
+                        showPopupGagal("Gagal menyimpan hasil deteksi")
+                        Log.w(TAG, "Error adding document", e)
+                    }
+            }.addOnFailureListener { exception ->
+                Toast.makeText(this@ResultDetectionActivity, "Error getting download URL: ${exception.message}", Toast.LENGTH_SHORT).show()
+                Log.w(TAG, "Error getting download URL", exception)
+            }
+        }.addOnFailureListener { exception ->
+            Toast.makeText(this@ResultDetectionActivity, "Error uploading image: ${exception.message}", Toast.LENGTH_SHORT).show()
+            Log.w(TAG, "Error uploading image", exception)
+        }
+    }
+
     private fun showLoading() {
         if (loadingDialog == null) {
             val inflater = LayoutInflater.from(this@ResultDetectionActivity)
@@ -254,31 +249,8 @@ class ResultDetectionActivity : AppCompatActivity() {
         loadingDialog?.dismiss()
     }
 
-    private fun displayImage(uri: Uri) {
-        Log.d(TAG, "Displaying image: $uri")
-        binding.ivHasilDeteksi.setImageURI(uri)
-
-        try {
-            val bitmap = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                val source = ImageDecoder.createSource(this.contentResolver, uri)
-                ImageDecoder.decodeBitmap(source)
-            } else {
-                val inputStream: InputStream? = contentResolver.openInputStream(uri)
-                BitmapFactory.decodeStream(inputStream)
-            }
-            resize = Bitmap.createScaledBitmap(bitmap, imageSize, imageSize, true)
-        } catch (e: Exception) {
-            Log.e(TAG, "Error decoding image", e)
-            finish()
-        }
-    }
-
-
-
-    //Popup berhasil
     private fun showPopupSimpan(message: String) {
         val dialogSuccessBinding = LayoutSuccessBinding.inflate(layoutInflater)
-
         dialogSuccessBinding.tvSuccess.text = message
 
         val dialog = AlertDialog.Builder(this@ResultDetectionActivity)
@@ -295,10 +267,8 @@ class ResultDetectionActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    //Popup gagal
     private fun showPopupGagal(message: String) {
         val dialogFailedBinding = LayoutSuccessBinding.inflate(layoutInflater)
-
         dialogFailedBinding.tvSuccess.text = message
 
         val dialog = AlertDialog.Builder(this@ResultDetectionActivity)
@@ -311,6 +281,8 @@ class ResultDetectionActivity : AppCompatActivity() {
         dialogFailedBinding.btnOk.setOnClickListener {
             dialog.dismiss()
         }
+
+        dialog.show()
     }
 
     override fun onDestroy() {
@@ -320,6 +292,6 @@ class ResultDetectionActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_IMAGE_URI = "extra_image_uri"
-        const val TAG = "imagePicker"
+        const val TAG = "ResultDetectionActivity"
     }
 }

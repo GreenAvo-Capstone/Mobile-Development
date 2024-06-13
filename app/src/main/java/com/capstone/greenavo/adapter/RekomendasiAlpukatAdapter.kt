@@ -50,7 +50,8 @@ class RekomendasiAlpukatAdapter(private val listRekomendasi: MutableList<Rekomen
 
         if (rekomendasi.isFavorite) {
             // Remove from favorites
-            favoriteCollection.document(rekomendasi.nama).delete().addOnSuccessListener {
+            val docId = rekomendasi.id ?: ""
+            favoriteCollection.document(docId).delete().addOnSuccessListener {
                 rekomendasi.isFavorite = false
                 updateFavoriteIcon(holder, false)
             }.addOnFailureListener {
@@ -64,7 +65,8 @@ class RekomendasiAlpukatAdapter(private val listRekomendasi: MutableList<Rekomen
                 "deskripsi" to rekomendasi.deskripsi
             )
 
-            favoriteCollection.document(rekomendasi.nama).set(favoriteData, SetOptions.merge()).addOnSuccessListener {
+            val docId = rekomendasi.id ?: ""
+            favoriteCollection.document(docId).set(favoriteData, SetOptions.merge()).addOnSuccessListener {
                 rekomendasi.isFavorite = true
                 updateFavoriteIcon(holder, true)
             }.addOnFailureListener {
@@ -80,7 +82,7 @@ class RekomendasiAlpukatAdapter(private val listRekomendasi: MutableList<Rekomen
         }
 
         val userId = currentUser.uid
-        val favoriteDocRef = db.collection("users").document(userId).collection("favorite").document(rekomendasi.nama)
+        val favoriteDocRef = db.collection("users").document(userId).collection("favorite").document(rekomendasi.id ?: "")
 
         favoriteDocRef.get().addOnSuccessListener { document ->
             if (document.exists()) {
