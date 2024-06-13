@@ -17,7 +17,6 @@ import com.capstone.greenavo.R
 import com.capstone.greenavo.databinding.ActivityRegisterBinding
 import com.capstone.greenavo.databinding.LayoutFailedBinding
 import com.capstone.greenavo.databinding.LayoutPeringatanBinding
-import com.capstone.greenavo.databinding.LayoutSuccessBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
