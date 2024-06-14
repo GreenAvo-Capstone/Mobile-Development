@@ -124,7 +124,7 @@ class ProfileFragment : Fragment() {
     //Popup Informasi
     private fun showPopupKonfirmasi() {
         val dialogKonfirmasiBinding = LayoutKonfirmasiBinding.inflate(layoutInflater)
-        dialogKonfirmasiBinding.tvKonfirmasi.text = "Apakah ingin melakukan scan ?"
+        dialogKonfirmasiBinding.tvKonfirmasi.text = "Apakah anda ingin keluar?"
 
         val dialog = AlertDialog.Builder(requireContext())
             .setView(dialogKonfirmasiBinding.root)

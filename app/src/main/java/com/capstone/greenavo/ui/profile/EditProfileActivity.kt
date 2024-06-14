@@ -1,16 +1,22 @@
 package com.capstone.greenavo.ui.profile
 
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import com.bumptech.glide.Glide
 import com.capstone.greenavo.R
 import com.capstone.greenavo.databinding.ActivityEditProfileBinding
+import com.capstone.greenavo.databinding.LayoutFailedBinding
+import com.capstone.greenavo.databinding.LayoutKonfirmasiBinding
+import com.capstone.greenavo.databinding.LayoutSuccessBinding
 import com.capstone.greenavo.utils.getImageUri
 import com.capstone.greenavo.utils.reduceFileImage
 import com.capstone.greenavo.utils.uriToFile
@@ -34,6 +40,8 @@ class EditProfileActivity : AppCompatActivity() {
     private var currentImageUri: Uri? = null
     private var croppedImageUri: Uri? = null
 
+    private var loadingDialog: AlertDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityEditProfileBinding.inflate(layoutInflater)
@@ -50,7 +58,7 @@ class EditProfileActivity : AppCompatActivity() {
         }
 
         binding.btnKonfirmasi.setOnClickListener {
-            actionSaveData(auth.currentUser?.uid.toString(), croppedImageUri.toString())
+            showPopupKonfirmasi("Apakah anda yakin ingin mengubah data profil?")
         }
 
         binding.ivBack.setOnClickListener {
@@ -205,7 +213,7 @@ class EditProfileActivity : AppCompatActivity() {
                 // Get the URL of the uploaded cropped image
                 storageRef.downloadUrl.addOnSuccessListener { imageUrl ->
                     // Update Firestore document with the new image URL
-                    Log.e(TAG, "Image URL: $imageUrl")
+                    showPopupGanti("Foto profil berhasil diubah")
                 }
             }
             .addOnFailureListener { e ->
@@ -215,24 +223,134 @@ class EditProfileActivity : AppCompatActivity() {
     }
 
     //Simpan data
-    private fun actionSaveData(userId: String, imageUrl: String) {
+    private fun actionSaveData(userId: String, imageUrl: String? = null) {
+        showLoading()
         val user = hashMapOf<String, Any>(
             "name" to binding.etNama.text.toString(),
-            "foto_profil" to imageUrl,  // Simpan URL gambar di sini
             "alamat" to binding.etAlamat.text.toString(),
             "no_tlp" to binding.etNomorTelepon.text.toString()
         )
+
+        if (imageUrl != null) {
+            user["foto_profil"] = imageUrl
+        }
 
         db.collection("users")
             .document(userId)
             .update(user)
             .addOnSuccessListener {
-                Toast.makeText(this, "Data profil berhasil diupdate!", Toast.LENGTH_SHORT).show()
-                finish()
+                hideLoading()
+                showPopupBerhasil("Data berhasil diubah")
             }
             .addOnFailureListener { e ->
+                showPopupGagal("Data gagal diubah")
                 Toast.makeText(this, "Error: $e", Toast.LENGTH_SHORT).show()
             }
+    }
+
+    //Popup gagal
+    private fun showPopupGagal(message: String) {
+        val dialogFailedBinding = LayoutFailedBinding.inflate(layoutInflater)
+
+        dialogFailedBinding.tvFailed.text = message
+
+        val dialog = AlertDialog.Builder(this@EditProfileActivity)
+            .setView(dialogFailedBinding.root)
+            .setCancelable(false)
+            .create()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogFailedBinding.btnOk.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    //Popup berhasil
+    private fun showPopupBerhasil(message: String) {
+        val dialogSuccessBinding = LayoutSuccessBinding.inflate(layoutInflater)
+
+        dialogSuccessBinding.tvSuccess.text = message
+
+        val dialog = AlertDialog.Builder(this@EditProfileActivity)
+            .setView(dialogSuccessBinding.root)
+            .setCancelable(false)
+            .create()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogSuccessBinding.btnOk.setOnClickListener {
+            dialog.dismiss()
+            finish()
+        }
+
+        dialog.show()
+    }
+
+    private fun showPopupGanti(message: String) {
+        val dialogSuccessBinding = LayoutSuccessBinding.inflate(layoutInflater)
+
+        dialogSuccessBinding.tvSuccess.text = message
+
+        val dialog = AlertDialog.Builder(this@EditProfileActivity)
+            .setView(dialogSuccessBinding.root)
+            .setCancelable(false)
+            .create()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogSuccessBinding.btnOk.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    //Popup konfirmasi
+    private fun showPopupKonfirmasi(message: String) {
+        val dialogKonfirmasiBinding = LayoutKonfirmasiBinding.inflate(layoutInflater)
+        dialogKonfirmasiBinding.tvKonfirmasi.text = message
+
+        val dialog = AlertDialog.Builder(this@EditProfileActivity)
+            .setView(dialogKonfirmasiBinding.root)
+            .setCancelable(false)
+            .create()
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+        dialogKonfirmasiBinding.btnYes.setOnClickListener {
+            dialog.dismiss()
+            actionSaveData(auth.currentUser?.uid.toString(), croppedImageUri.toString())
+        }
+
+        dialogKonfirmasiBinding.btnNo.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
+
+    //Loading
+    private fun showLoading() {
+        if (loadingDialog == null) {
+            val inflater = LayoutInflater.from(this@EditProfileActivity)
+            val loadingView = inflater.inflate(R.layout.layout_loading, null)
+
+            loadingDialog = AlertDialog.Builder(this@EditProfileActivity)
+                .setView(loadingView)
+                .setCancelable(false)
+                .create()
+
+            loadingDialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        }
+
+        loadingDialog?.show()
+    }
+
+    private fun hideLoading() {
+        loadingDialog?.dismiss()
     }
 
     override fun onDestroy() {
