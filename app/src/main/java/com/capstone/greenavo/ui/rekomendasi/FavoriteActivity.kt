@@ -44,6 +44,15 @@ class FavoriteActivity : AppCompatActivity() {
         binding.rvFavorite.adapter = rekomendasiAlpukatAdapter
 
         reviewDataFavorite()
+
+        refresh()
+    }
+
+    private fun refresh() {
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            binding.swipeRefreshLayout.isRefreshing = false
+            reviewDataFavorite()
+        }
     }
 
     private fun reviewDataFavorite() {
