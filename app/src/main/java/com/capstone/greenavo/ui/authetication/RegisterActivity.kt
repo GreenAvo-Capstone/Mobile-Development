@@ -146,18 +146,18 @@ class RegisterActivity : AppCompatActivity() {
 
     //Popup gagal
     private fun showPopupGagal(message: String) {
-        val dialogSuccessBinding = LayoutFailedBinding.inflate(layoutInflater)
+        val dialogFailedBinding = LayoutFailedBinding.inflate(layoutInflater)
 
-        dialogSuccessBinding.tvFailed.text = message
+        dialogFailedBinding.tvFailed.text = message
 
         val dialog = AlertDialog.Builder(this@RegisterActivity)
-            .setView(dialogSuccessBinding.root)
+            .setView(dialogFailedBinding.root)
             .setCancelable(false)
             .create()
 
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
-        dialogSuccessBinding.btnOk.setOnClickListener {
+        dialogFailedBinding.btnOk.setOnClickListener {
             dialog.dismiss()
         }
 
