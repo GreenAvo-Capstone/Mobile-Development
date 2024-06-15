@@ -11,8 +11,6 @@ import android.os.Environment
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
 import androidx.exifinterface.media.ExifInterface
-import com.bumptech.glide.load.resource.bitmap.TransformationUtils
-import com.bumptech.glide.load.resource.bitmap.TransformationUtils.rotateImage
 import com.capstone.greenavo.BuildConfig
 import java.io.ByteArrayOutputStream
 import java.io.File
