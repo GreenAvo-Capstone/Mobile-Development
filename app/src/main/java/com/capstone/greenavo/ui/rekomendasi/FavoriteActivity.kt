@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstone.greenavo.adapter.RekomendasiAlpukatAdapter
-import com.capstone.greenavo.data.RekomendasiAlpukat
+import com.capstone.greenavo.datadummy.RekomendasiAlpukat
 import com.capstone.greenavo.databinding.ActivityFavoriteBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth

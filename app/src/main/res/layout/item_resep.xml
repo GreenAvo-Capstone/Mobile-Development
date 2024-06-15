@@ -15,7 +15,7 @@
         <ImageView
             android:id="@+id/iv_nama_resep"
             android:layout_width="150dp"
-            android:layout_height="100dp"
+            android:layout_height="110dp"
             android:scaleType="fitXY"
             android:background="@color/black"/>
         <TextView

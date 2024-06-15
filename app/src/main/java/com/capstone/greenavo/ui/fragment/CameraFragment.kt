@@ -31,15 +31,14 @@ class CameraFragment : Fragment() {
     private var currentImageUri: Uri? = null
     private var croppedImageUri: Uri? = null
 
-    private var _binding: FragmentCameraBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentCameraBinding
 
     private var loadingDialog: AlertDialog? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        _binding = FragmentCameraBinding.inflate(inflater, container, false)
+        binding = FragmentCameraBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -239,11 +238,6 @@ class CameraFragment : Fragment() {
             intent.putExtra(ResultDetectionActivity.EXTRA_IMAGE_URI, uri.toString())
             startActivityForResult(intent, REQUEST_RESULT)
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     companion object {

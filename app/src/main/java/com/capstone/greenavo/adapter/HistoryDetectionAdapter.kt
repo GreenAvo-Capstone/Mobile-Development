@@ -7,7 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.capstone.greenavo.R
-import com.capstone.greenavo.data.ResultHistory
+import com.capstone.greenavo.datadummy.ResultHistory
 import com.capstone.greenavo.databinding.ItemHistoryBinding
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth

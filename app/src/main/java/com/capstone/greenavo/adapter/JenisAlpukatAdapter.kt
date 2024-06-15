@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.capstone.greenavo.data.JenisAlpukat
+import com.capstone.greenavo.datadummy.JenisAlpukat
 import com.capstone.greenavo.databinding.ItemAlpukatBinding
 import com.capstone.greenavo.ui.detail.DetailJenisAlpukatActivity
 

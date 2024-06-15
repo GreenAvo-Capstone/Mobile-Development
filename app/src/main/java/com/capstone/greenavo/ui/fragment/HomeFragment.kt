@@ -9,14 +9,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.capstone.greenavo.adapter.JenisAlpukatAdapter
 import com.capstone.greenavo.adapter.ResepAlpukatAdapter
-import com.capstone.greenavo.data.JenisAlpukat
-import com.capstone.greenavo.data.ResepAlpukat
+import com.capstone.greenavo.datadummy.JenisAlpukat
+import com.capstone.greenavo.datadummy.ResepAlpukat
 import com.capstone.greenavo.databinding.FragmentHomeBinding
 import com.google.firebase.firestore.FirebaseFirestore
 
 class HomeFragment : Fragment() {
-    private var _binding: FragmentHomeBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: FragmentHomeBinding
 
     // Adapter
     private lateinit var jenisAlpukatAdapter: JenisAlpukatAdapter
@@ -33,7 +32,7 @@ class HomeFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -63,14 +62,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun showJenisAlpukat() {
-        _binding?.apply {
+        binding?.apply {
             progressIndicatorAlpukat.visibility = View.VISIBLE
         }
 
         db.collection("jenis_alpukat")
             .get()
             .addOnSuccessListener { documents ->
-                _binding?.apply {
+                binding?.apply {
                     jenisAlpukatList.clear()
                     for (document in documents) {
                         val nama = document.getString("nama") ?: ""
@@ -103,7 +102,7 @@ class HomeFragment : Fragment() {
                 }
             }
             .addOnFailureListener { exception ->
-                _binding?.apply {
+                binding?.apply {
                     Toast.makeText(requireContext(), exception.message, Toast.LENGTH_SHORT).show()
                     progressIndicatorAlpukat.visibility = View.GONE
                 }
@@ -111,14 +110,14 @@ class HomeFragment : Fragment() {
     }
 
     private fun showResepAlpukat() {
-        _binding?.apply {
+        binding?.apply {
             progressIndicatorResep.visibility = View.VISIBLE
         }
 
         db.collection("resep_alpukat")
             .get()
             .addOnSuccessListener { documents ->
-                _binding?.apply {
+                binding?.apply {
                     resepAlpukatList.clear()
                     for (document in documents) {
                         val nama = document.getString("nama_resep") ?: ""
@@ -149,15 +148,10 @@ class HomeFragment : Fragment() {
                 }
             }
             .addOnFailureListener { exception ->
-                _binding?.apply {
+                binding?.apply {
                     Toast.makeText(requireContext(), exception.message, Toast.LENGTH_SHORT).show()
                     progressIndicatorResep.visibility = View.GONE
                 }
             }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }

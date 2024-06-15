@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.capstone.greenavo.R
-import com.capstone.greenavo.data.RekomendasiAlpukat
+import com.capstone.greenavo.datadummy.RekomendasiAlpukat
 import com.capstone.greenavo.databinding.ItemRekomendasiBinding
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

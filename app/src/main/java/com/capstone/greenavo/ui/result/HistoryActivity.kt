@@ -4,7 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.capstone.greenavo.data.ResultHistory
+import com.capstone.greenavo.datadummy.ResultHistory
 import com.capstone.greenavo.databinding.ActivityHistoryBinding
 import com.capstone.greenavo.adapter.HistoryDetectionAdapter
 import com.google.firebase.Firebase
