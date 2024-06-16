@@ -84,8 +84,8 @@ dependencies {
     implementation ("com.codesgood:justifiedtextview:1.1.0")
 
     //Tensorflow Lite
-    implementation("org.tensorflow:tensorflow-lite-support:0.1.0")
-    implementation("org.tensorflow:tensorflow-lite-metadata:0.1.0")
+    implementation("org.tensorflow:tensorflow-lite-support:0.4.4")
+    implementation("org.tensorflow:tensorflow-lite-metadata:0.4.4")
 
     //Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.1.0"))
