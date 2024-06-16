@@ -25,39 +25,25 @@
             android:layout_weight="1"
             android:orientation="vertical"
             android:layout_marginStart="12dp">
+            <TextView
+                android:id="@+id/tv_hasil_kematangan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="low/medium/high"
+                android:fontFamily="@font/baloo2_bold"
+                android:textSize="20sp"
+                android:layout_marginStart="2dp"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
                 android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Kematangan: "
-                    android:fontFamily="@font/baloo2_regular"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tv_hasil_kematangan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="low/medium/high"
-                    android:fontFamily="@font/baloo2_bold"
-                    android:textSize="14sp"
-                    android:layout_marginStart="2dp"/>
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Skor: "
                     android:fontFamily="@font/baloo2_regular"
                     android:textSize="14sp" />
-
                 <TextView
                     android:id="@+id/tv_skor"
                     android:layout_width="wrap_content"

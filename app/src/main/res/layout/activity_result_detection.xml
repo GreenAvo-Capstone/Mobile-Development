@@ -55,10 +55,10 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
                 android:fontFamily="@font/baloo2_semibold"
-                android:text="Nama Alpukat"
+                android:text="Hasil:"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/iv_hasil_deteksi" />
+                app:layout_constraintTop_toBottomOf="@+id/iv_hasil_deteksi"/>
             <TextView
                 android:id="@+id/title_kematangan"
                 android:layout_width="wrap_content"
@@ -98,7 +98,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="20dp"
-                android:text="100%"
+                android:text="%"
                 android:fontFamily="@font/baloo2_medium"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -20,7 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import com.capstone.greenavo.R
 import com.capstone.greenavo.databinding.ActivityResultDetectionBinding
 import com.capstone.greenavo.databinding.LayoutSuccessBinding
-import com.capstone.greenavo.ml.AvocadoClassification
+import com.capstone.greenavo.ml.ModelGreenavo
 import com.capstone.greenavo.ui.rekomendasi.RekomendasiActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -99,9 +99,11 @@ class ResultDetectionActivity : AppCompatActivity() {
     }
 
     private fun classifyImage() {
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(Dispatchers.Main) {
             try {
-                val model = AvocadoClassification.newInstance(this@ResultDetectionActivity)
+                val model = ModelGreenavo.newInstance(this@ResultDetectionActivity)
+
+                // Creates inputs for reference.
                 val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, imageSize, imageSize, 3), DataType.FLOAT32)
 
                 val intValues = IntArray(resize.width * resize.height)
@@ -122,15 +124,19 @@ class ResultDetectionActivity : AppCompatActivity() {
                 }
 
                 inputFeature0.loadBuffer(byteBuffer)
+
+                // Runs model inference and gets result.
                 val outputs = model.process(inputFeature0)
                 val outputFeature0 = outputs.outputFeature0AsTensorBuffer
 
                 val confidences = outputFeature0.floatArray
 
-                val labelMap = mapOf(
-                    0 to "Belum Matang",
-                    1 to "Setengah Matang",
-                    2 to "Matang"
+                val labelMap = hashMapOf(
+                    0 to "Breaking",
+                    2 to "Overripe",
+                    3 to "RipeFS",
+                    4 to "RipeSS",
+                    5 to "Underripe"
                 )
 
                 var maxPos = 0
@@ -143,16 +149,18 @@ class ResultDetectionActivity : AppCompatActivity() {
                     }
                 }
 
-                val label = labelMap[maxPos] ?: "Unknown"
+                val label = labelMap[maxPos]
 
                 fun Float.formatToString(): String {
-                    return String.format("%.0f%%", this * 100)
+                    return String.format("%.2f%%", this * 100)
                 }
 
                 val color = when (label) {
-                    "Belum Matang" -> R.color.low
-                    "Setengah Matang" -> R.color.medium
-                    "Matang" -> R.color.high
+                    "Breaking" -> R.color.breaking
+                    "Overripe" -> R.color.overripe
+                    "RipeFS" -> R.color.ripefs
+                    "RipeSS" -> R.color.ripess
+                    "Underripe" -> R.color.underripe
                     else -> android.R.color.black
                 }
 
@@ -160,7 +168,7 @@ class ResultDetectionActivity : AppCompatActivity() {
                     binding.hasilKematangan.text = label
                     binding.hasilKematangan.setTextColor(resources.getColor(color, null))
                     binding.hasilSkor.text = maxConfidence.formatToString()
-                    binding.isiDeskripisi.text = "Hasil tingkat kematangan adalah $label dengan skor ${maxConfidence.formatToString()}"
+                    binding.isiDeskripisi.text = "The maturity level results are $label with score ${maxConfidence.formatToString()}"
                 }
 
                 model.close()
@@ -182,7 +190,7 @@ class ResultDetectionActivity : AppCompatActivity() {
 
         binding.rekomendasi.apply {
             visibility = View.VISIBLE
-            text = if (label == "Belum Matang") "" else getString(R.string.rekomendasi)
+            text = if (label == "Underripe" || label == "Overripe") "" else getString(R.string.rekomendasi)
         }
 
         val bitmap = (imageView.drawable as BitmapDrawable).bitmap

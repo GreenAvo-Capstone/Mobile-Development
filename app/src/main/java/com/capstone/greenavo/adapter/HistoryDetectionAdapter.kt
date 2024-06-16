@@ -30,9 +30,12 @@ class HistoryDetectionAdapter(private val listHasilDeteksi: MutableList<ResultHi
         holder.binding.tvHasilKematangan.text = hasilDeteksi.label
         // Ubah warna teks berdasarkan label hasil
         val textColor = when (hasilDeteksi.label) {
-            "Belum Matang" -> ContextCompat.getColor(holder.binding.root.context, R.color.low)
-            "Setengah Matang" -> ContextCompat.getColor(holder.binding.root.context, R.color.medium)
-            "Matang" -> ContextCompat.getColor(holder.binding.root.context, R.color.high)
+            "Underripe" -> ContextCompat.getColor(holder.binding.root.context, R.color.underripe)
+            "Breaking" -> ContextCompat.getColor(holder.binding.root.context, R.color.breaking)
+            "RipeFS" -> ContextCompat.getColor(holder.binding.root.context, R.color.ripefs)
+            "RipeSS" -> ContextCompat.getColor(holder.binding.root.context, R.color.ripess)
+            "Overripe" -> ContextCompat.getColor(holder.binding.root.context, R.color.overripe)
+
             else -> ContextCompat.getColor(holder.binding.root.context, android.R.color.black)
         }
 
