@@ -50,7 +50,7 @@ class ResultDetectionActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.ivBack.setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
         binding.btnSave.setOnClickListener {
