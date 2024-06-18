@@ -1,6 +1,6 @@
 <h1>GreenAvo - Mobile Development</h1>
 <p align="center">
-
+<img width="200" src="https://github.com/GreenAvo-Capstone/Mobile-Development/assets/114552797/09b216ee-b656-4e41-858a-ba5378fb1129">
 </p>
 
 # <h2>Profile</h2>
