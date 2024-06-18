@@ -30,7 +30,7 @@ class HistoryDetectionAdapter(private val listHasilDeteksi: MutableList<ResultHi
         holder.binding.tvHasilKematangan.text = hasilDeteksi.label
         // Ubah warna teks berdasarkan label hasil
         val textColor = when (hasilDeteksi.label) {
-            "Underripe" -> ContextCompat.getColor(holder.binding.root.context, R.color.underripe)
+            "Underrive" -> ContextCompat.getColor(holder.binding.root.context, R.color.underripe)
             "Breaking" -> ContextCompat.getColor(holder.binding.root.context, R.color.breaking)
             "RipeFS" -> ContextCompat.getColor(holder.binding.root.context, R.color.ripefs)
             "RipeSS" -> ContextCompat.getColor(holder.binding.root.context, R.color.ripess)

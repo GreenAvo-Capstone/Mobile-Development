@@ -20,7 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import com.capstone.greenavo.R
 import com.capstone.greenavo.databinding.ActivityResultDetectionBinding
 import com.capstone.greenavo.databinding.LayoutSuccessBinding
-import com.capstone.greenavo.ml.ModelGreenavo
+import com.capstone.greenavo.ml.ModelAlpukat
 import com.capstone.greenavo.ui.rekomendasi.RekomendasiActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -101,7 +101,7 @@ class ResultDetectionActivity : AppCompatActivity() {
     private fun classifyImage() {
         lifecycleScope.launch(Dispatchers.Main) {
             try {
-                val model = ModelGreenavo.newInstance(this@ResultDetectionActivity)
+                val model = ModelAlpukat.newInstance(this@ResultDetectionActivity)
 
                 // Creates inputs for reference.
                 val inputFeature0 = TensorBuffer.createFixedSize(intArrayOf(1, imageSize, imageSize, 3), DataType.FLOAT32)
@@ -133,10 +133,10 @@ class ResultDetectionActivity : AppCompatActivity() {
 
                 val labelMap = hashMapOf(
                     0 to "Breaking",
-                    2 to "Overripe",
-                    3 to "RipeFS",
-                    4 to "RipeSS",
-                    5 to "Underripe"
+                    1 to "Overripe",
+                    2 to "RipeFS",
+                    3 to "RipeSS",
+                    4 to "Underrive"
                 )
 
                 var maxPos = 0
@@ -152,7 +152,7 @@ class ResultDetectionActivity : AppCompatActivity() {
                 val label = labelMap[maxPos]
 
                 fun Float.formatToString(): String {
-                    return String.format("%.2f%%", this * 100)
+                    return String.format("%.0f%%", this * 100)
                 }
 
                 val color = when (label) {
@@ -160,7 +160,7 @@ class ResultDetectionActivity : AppCompatActivity() {
                     "Overripe" -> R.color.overripe
                     "RipeFS" -> R.color.ripefs
                     "RipeSS" -> R.color.ripess
-                    "Underripe" -> R.color.underripe
+                    "Underrive" -> R.color.underripe
                     else -> android.R.color.black
                 }
 
